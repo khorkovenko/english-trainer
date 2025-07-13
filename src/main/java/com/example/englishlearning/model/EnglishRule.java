@@ -1,0 +1,77 @@
+package com.example.englishlearning.model;
+
+public enum EnglishRule {
+    // Tenses
+    PRESENT_SIMPLE,
+    PRESENT_CONTINUOUS,
+    PRESENT_PERFECT,
+    PRESENT_PERFECT_CONTINUOUS,
+    PAST_SIMPLE,
+    PAST_CONTINUOUS,
+    PAST_PERFECT,
+    PAST_PERFECT_CONTINUOUS,
+    FUTURE_SIMPLE,
+    FUTURE_CONTINUOUS,
+    FUTURE_PERFECT,
+    FUTURE_PERFECT_CONTINUOUS,
+
+    // Direct and Indirect Speech
+    DIRECT_SPEECH,
+    INDIRECT_SPEECH,
+
+    // Consequences of Tenses
+    SEQUENCE_OF_TENSES,
+
+    // Conditionals
+    ZERO_CONDITIONAL,
+    FIRST_CONDITIONAL,
+    SECOND_CONDITIONAL,
+    THIRD_CONDITIONAL,
+    MIXED_CONDITIONAL,
+
+    // Parts of Speech
+    NOUN,
+    PRONOUN,
+    VERB,
+    ADJECTIVE,
+    ADVERB,
+    PREPOSITION,
+    CONJUNCTION,
+    INTERJECTION,
+    DETERMINER,
+
+    // Gerund and Infinitive
+    GERUND,
+    INFINITIVE,
+
+    // Phrasal Verbs
+    COMMON_PHRASAL_VERBS,
+    SEPARABLE_PHRASAL_VERBS,
+    INSEPARABLE_PHRASAL_VERBS,
+
+    // Grammar Rules
+    ACTIVE_VOICE,
+    PASSIVE_VOICE,
+    RELATIVE_CLAUSES,
+    MODAL_VERBS,
+    ARTICLES,
+    SUBJECT_VERB_AGREEMENT,
+    QUESTION_FORMS,
+
+    // Vocabulary-related Sets
+    IDIOMS,
+    COLLOCATIONS,
+    COMMON_EXPRESSIONS,
+    SYNONYMS_AND_ANTONYMS,
+
+    // Word Formation and Syntax
+    PREFIXES_AND_SUFFIXES,
+    COMPOUND_WORDS,
+    SENTENCE_STRUCTURE,
+    COMPLEX_SENTENCES,
+    SIMPLE_SENTENCES,
+
+    // Writing Rules
+    PUNCTUATION_MARKS,
+    CAPITALIZATION_RULES
+}
