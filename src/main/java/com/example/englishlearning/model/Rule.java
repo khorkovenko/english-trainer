@@ -1,6 +1,6 @@
 package com.example.englishlearning.model;
 
-public enum EnglishRule {
+public enum Rule {
     // Tenses
     PRESENT_SIMPLE,
     PRESENT_CONTINUOUS,
