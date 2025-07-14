@@ -3,7 +3,7 @@ package com.example.englishlearning.model;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
+import java.util.Set;
 
 @Document(collection = "mistakes")
 @Data
@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Mistakes {
 
-    private List<Word> words;
-    private List<Rule> rules;
+    private Set<Word> words;
+    private Set<Rule> rules;
 
 }

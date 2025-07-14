@@ -13,6 +13,6 @@ import java.util.Date;
 public class Statistics {
 
         private int percent;
-        private Date whenToRepeat;
+        private Date lastRepeat;
 
 }

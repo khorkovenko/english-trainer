@@ -73,5 +73,15 @@ public enum Rule {
 
     // Writing Rules
     PUNCTUATION_MARKS,
-    CAPITALIZATION_RULES
+    CAPITALIZATION_RULES,
+
+    // Reporting Verbs
+    ADMIT_DOING,
+    REFUSE_TO_DO,
+    AGREE_TO_DO,
+    PROMISE_TO_DO,
+    SUGGEST_DOING,
+    RECOMMEND_DOING,
+    APOLOGIZE_FOR_DOING
+
 }
