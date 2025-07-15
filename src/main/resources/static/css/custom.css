@@ -1,0 +1,132 @@
+/* Global Styles */
+body {
+    font-family: 'Borel', cursive;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* Utility classes for layout */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px;
+}
+
+/* Block styles for forms (login & signup) */
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.form-container__card {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+.form-container__title {
+    text-align: center;
+    font-size: 1.75rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-container__form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-container__input-group {
+    margin-bottom: 15px;
+}
+
+.form-container__label {
+    font-size: 0.875rem;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.form-container__input {
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-container__button {
+    background-color: #0d6efd;
+    color: #ffffff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.form-container__button:hover {
+    background-color: #0056b3;
+}
+
+/* Additional links */
+.form-container__link {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.9rem;
+    color: #0d6efd;
+    text-decoration: none;
+}
+
+.form-container__link:hover {
+    text-decoration: underline;
+}
+
+/* User page styles */
+.user-page {
+    padding: 20px;
+}
+
+.user-page__title {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 2rem;
+}
+
+.user-page__logout {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.user-page__link {
+    text-align: left;
+    color: white;
+    background-color: red;
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+/* Section styles for User Page */
+.user-page__section {
+    margin-top: 20px;
+}
+
+.user-page__section-title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.user-page__paragraph {
+    font-size: 0.9rem;
+    color: #555;
+}
