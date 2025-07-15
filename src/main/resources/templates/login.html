@@ -4,64 +4,46 @@
     <title>LingoPilot</title>
 </head>
 <body>
-<div class="center-div">
-    <h2 class="gothic-font">LingoPilot</h2>
+<div>
+    <h2>LingoPilot</h2>
     <form th:action="@{/login}" method="post">
-        <div class="align-input-div floating-label-wrapper">
+        <div>
             <input
                     type="text"
                     id="username"
-                    class="big-rounded-input lobster-font floating-input"
                     name="username"
                     autocomplete="username"
                     tabindex="1"
                     required
             />
-            <label class="lobster-font floating-label" for="username">E-mail:</label>
+            <label for="username">E-mail:</label>
         </div>
-        <div class="align-input-div floating-label-wrapper">
+        <div>
             <input
                     type="password"
                     id="password"
-                    class="big-rounded-input lobster-font floating-input"
                     name="password"
                     autocomplete="current-password"
                     tabindex="2"
                     required
             />
-            <label class="lobster-font floating-label" for="password">Password:</label>
+            <label for="password">Password:</label>
         </div>
-        <div style="display: flex; justify-content: center; margin-top: 1.5rem;">
+        <div>
             <a href="javascript:void(0)"
-               class="wave-btn"
                tabindex="3"
                onclick="document.querySelector('form').submit();">
-                <span class="wave-btn-text">Log In <i class="fas fa-sign-in-alt"></i></span>
-                <span class="wave-btn-waves" style="background-color: blue"></span>
+                <span>Log In</span>
             </a>
         </div>
     </form>
-    <a th:href="@{/oauth2/authorization/google}" class="wave-btn mt10" tabindex="4">
-        <span class="wave-btn-text">Log in <i class="fab fa-google"></i>+</span>
-        <span class="wave-btn-waves" style="background-color: red"></span>
+    <a th:href="@{/oauth2/authorization/google}" tabindex="4">
+        <span>Log in with Google+</span>
     </a>
-    <a th:href="@{/signup}" class="wave-btn mt10" tabindex="5">
-        <span class="wave-btn-text">Sign Up <i class="fas fa-user-plus"></i></span>
-        <span class="wave-btn-waves" style="background-color: green"></span>
+    <a th:href="@{/signup}" tabindex="5">
+        <span>Sign Up</span>
     </a>
 </div>
-
-<script>
-    document.addEventListener("keydown", (event) => {
-        if (event.key === "Tab") {
-            const activeElement = document.activeElement;
-            if (activeElement.getAttribute("tabindex") === "5" && !event.shiftKey) {
-                event.preventDefault();
-                document.querySelector('[tabindex="1"]').focus();
-            }
-        }
-    });
-</script>
 
 <script type="module">
     import { handleTabNavigation } from '../static/js/script';
