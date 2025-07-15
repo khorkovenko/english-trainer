@@ -1,132 +1,261 @@
-/* Global Styles */
 body {
-    font-family: 'Borel', cursive;
-    background-color: #f8f9fa;
-    margin: 0;
-    padding: 0;
-    color: #333;
+    font-family: 'Roboto', sans-serif;
+    background-color: #000;
+    color: #fff;
 }
 
-/* Utility classes for layout */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 15px;
+input {
+    font-family: 'Roboto', sans-serif;
 }
 
-/* Block styles for forms (login & signup) */
-.form-container {
+.borel-font {
+    font-family: "Borel", cursive;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.gothic-font {
+    font-family: "Special Gothic Expanded One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.lobster-font {
+    font-family: "Lobster", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.center-div {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
-    min-height: 100vh;
-}
-
-.form-container__card {
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-    padding: 20px;
-}
-
-.form-container__title {
-    text-align: center;
-    font-size: 1.75rem;
-    margin-bottom: 20px;
-    color: #333;
-}
-
-.form-container__form {
-    display: flex;
     flex-direction: column;
+    text-align: center;
 }
 
-.form-container__input-group {
-    margin-bottom: 15px;
+.align-input-div {
+    margin: 10px 0 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
 }
 
-.form-container__label {
-    font-size: 0.875rem;
-    margin-bottom: 5px;
-    display: block;
+.big-rounded-input {
+    /*width: 350px;*/
+    padding: 15px;
+    font-size: 1.2rem;
+    border: 3px solid #000;
+    border-radius: 25px;
+    outline: none;
+    box-sizing: border-box;
+    margin-left: 10px;
+    transition: all 0.3s ease;
 }
 
-.form-container__input {
-    padding: 10px;
-    border: 1px solid #dee2e6;
-    border-radius: 5px;
+.big-rounded-input:focus {
+    border-color: #4973ff; /* Change border color to blue */
+    background: linear-gradient(145deg, #000, #1a1a1a); /* Add a subtle gradient */
+    box-shadow: 0 0 10px rgba(73, 115, 255, 0.8), 0 0 40px rgba(73, 115, 255, 0.4); /* Beautiful glow effect */
+    color: #fff;
+}
+
+.big-rounded-input::placeholder {
+    color: #aaa;
+    transition: color 0.3s ease;
+}
+
+.big-rounded-input:focus::placeholder {
+    color: #4973ff;
+}
+
+.mt10 {
+    margin-top: 10px;
+}
+
+.floating-label-wrapper {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.floating-input {
     width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
     box-sizing: border-box;
 }
 
-.form-container__button {
-    background-color: #0d6efd;
-    color: #ffffff;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+.floating-label {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    transition: all 0.2s ease;
+    background: white;
+    padding: 0 5px;
+    font-size: 1rem;
+    color: #888;
+    pointer-events: none;
 }
 
-.form-container__button:hover {
-    background-color: #0056b3;
-}
-
-/* Additional links */
-.form-container__link {
-    text-align: center;
-    margin-top: 15px;
-    font-size: 0.9rem;
-    color: #0d6efd;
-    text-decoration: none;
-}
-
-.form-container__link:hover {
-    text-decoration: underline;
-}
-
-/* User page styles */
-.user-page {
-    padding: 20px;
-}
-
-.user-page__title {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 2rem;
-}
-
-.user-page__logout {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 20px;
-}
-
-.user-page__link {
-    text-align: left;
-    color: white;
-    background-color: red;
-    padding: 8px 16px;
-    border-radius: 5px;
-    text-decoration: none;
-}
-
-/* Section styles for User Page */
-.user-page__section {
-    margin-top: 20px;
-}
-
-.user-page__section-title {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-    color: #333;
-}
-
-.user-page__paragraph {
-    font-size: 0.9rem;
+.floating-input:focus + .floating-label,
+.floating-input:not(:placeholder-shown) + .floating-label {
+    top: -10px;
+    font-size: 0.8rem;
     color: #555;
+}
+
+.floating-input:focus {
+    border-color: #555;
+    outline: none;
+}
+
+.floating-input:not(:placeholder-shown) {
+    border-color: #888;
+}
+
+/* Main button */
+.wave-btn {
+    width: 280px;
+    height: 60px;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: -o-flex;
+    display: flex !important;
+
+    overflow: hidden;
+
+    position: relative;
+
+    transition: all 0.8s ease 0s;
+    -webkit-transition: all 0.8s ease 0s;
+    -moz-transition: all 0.8s ease 0s;
+    -ms-transition: all 0.8s ease 0s;
+    -o-transition: all 0.8s ease 0s;
+
+    justify-content:center;
+    align-items: center;
+
+    border-radius: 0 0 10px 10px;
+    text-decoration: none;
+}
+
+.wave-btn:hover {
+    border-radius: 10px;
+
+    transition: all 0.8s ease 0.2s;
+    -webkit-transition: all 0.8s ease 0.2s;
+    -moz-transition: all 0.8s ease 0.2s;
+    -ms-transition: all 0.8s ease 0.2s;
+    -o-transition: all 0.8s ease 0.2s;
+
+    -webkit-box-shadow: 0 0 40px rgba(73, 115, 255, 0.6);
+    box-shadow: 0 0 40px rgba(73, 115, 255, 0.6);
+
+}
+.wave-btn:hover .wave-btn-waves{
+    top: -50px;
+}
+
+.wave-btn-text {
+    font-family: "Special Gothic Expanded One", Arial, "Helvetica Neue", Helvetica, sans-serif;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 8px;
+    position: relative;
+    z-index: 1;
+}
+.wave-btn-waves {
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    background-color: #4973ff;
+    top: 0;
+    left: 0;
+    -webkit-box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
+
+    transition: all 0.8s ease 0s;
+    -webkit-transition: all 0.8s ease 0s;
+    -moz-transition: all 0.8s ease 0s;
+    -ms-transition: all 0.8s ease 0s;
+    -o-transition: all 0.8s ease 0s;
+}
+.wave-btn-waves:after,
+.wave-btn-waves:before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 250%;
+    height: 250%;
+
+    transform: translate3d(-50%,-96%,0) rotate(0deg) scale(1);
+    -ms-transform: translate3d(-50%,-96%,0) rotate(0deg) scale(1);
+}
+
+.wave-btn-waves:before{
+    background-color: #000;
+    border-radius: 48%;
+
+    animation: waves 5s infinite linear;
+    -webkit-animation: waves 5s infinite linear;
+    -moz-animation: waves 5s infinite linear;
+    -o-animation: waves 5s infinite linear;
+}
+.wave-btn-waves:after{
+    background-color: rgba(0,0,0,0.5);
+    border-radius: 44%;
+
+    animation: waves 10s infinite linear;
+    -webkit-animation: waves 10s infinite linear;
+    -moz-animation: waves 10s infinite linear;
+    -o-animation: waves 10s infinite linear;
+}
+
+@keyframes waves{
+    0%{
+        transform: translate3d(-50%,-96%,0) rotate(0deg) scale(1);
+        -ms-transform: translate3d(-50%,-96%,0) rotate(0deg) scale(1);
+    }
+    100%{
+        transform: translate3d(-50%,-96%,0) rotate(360deg) scale(1);
+        -ms-transform: translate3d(-50%,-96%,0) rotate(360deg) scale(1);
+    }
+}
+@-webkit-keyframes waves{
+    0%{
+        transform: translate3d(-50%,-96%,0) rotate(0deg) scale(1);
+        -ms-transform: translate3d(-50%,-96%,0) rotate(0deg) scale(1);
+    }
+    100%{
+        transform: translate3d(-50%,-96%,0) rotate(360deg) scale(1);
+        -ms-transform: translate3d(-50%,-96%,0) rotate(360deg) scale(1);
+    }
+}
+@-moz-keyframes waves{
+    0%{
+        transform: translate3d(-50%,-96%,0) rotate(0deg) scale(1);
+        -ms-transform: translate3d(-50%,-96%,0) rotate(0deg) scale(1);
+    }
+    100%{
+        transform: translate3d(-50%,-96%,0) rotate(360deg) scale(1);
+        -ms-transform: translate3d(-50%,-96%,0) rotate(360deg) scale(1);
+    }
+}
+@-o-keyframes waves{
+    0%{
+        transform: translate3d(-50%,-96%,0) rotate(0deg) scale(1);
+        -ms-transform: translate3d(-50%,-96%,0) rotate(0deg) scale(1);
+    }
+    100%{
+        transform: translate3d(-50%,-96%,0) rotate(360deg) scale(1);
+        -ms-transform: translate3d(-50%,-96%,0) rotate(360deg) scale(1);
+    }
 }

@@ -1,4 +1,7 @@
 spring:
+  web:
+    resources:
+      static-locations: classpath:/static/
   data:
     mongodb:
       uri: ${MONGO_URI}
@@ -20,3 +23,5 @@ spring:
             user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
   messages:
     basename: messages
+server:
+  port: 8080

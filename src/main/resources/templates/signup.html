@@ -4,28 +4,29 @@
     <title>Sign Up</title>
 </head>
 <body>
-<div class="form-container">
-    <div class="form-container__card">
-        <h2 class="form-container__title">Sign Up</h2>
-        <form th:action="@{/signup}" method="post" class="form-container__form">
-            <div class="form-container__input-group">
-                <label for="email" class="form-container__label">Email:</label>
-                <input type="text" id="email" name="email" class="form-container__input" placeholder="Enter your email"
-                       th:value="${email}" th:readonly="${email != null}" required>
-            </div>
-            <div class="form-container__input-group">
-                <label for="password" class="form-container__label">Password:</label>
-                <input type="password" id="password" name="password" class="form-container__input"
-                       placeholder="Enter your password" required>
-            </div>
-            <div class="form-container__input-group">
-                <label for="confirmPassword" class="form-container__label">Confirm Password:</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" class="form-container__input"
-                       placeholder="Confirm your password" required>
-            </div>
-            <button type="submit" class="form-container__button">Sign Up</button>
-        </form>
-        <a th:href="@{/login}" class="form-container__link">Already have an account? Log In</a>
+<div class="center-div">
+    <h2>Sign Up</h2>
+    <form th:action="@{/signup}" method="post">
+        <div>
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email"
+                   placeholder="Enter your email"
+                   th:value="${email}" th:readonly="${email != null}" required>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password"
+                   placeholder="Enter your password" required>
+        </div>
+        <div>
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword"
+                   placeholder="Confirm your password" required>
+        </div>
+        <button type="submit">Sign Up</button>
+    </form>
+    <div>
+        <a th:href="@{/login}">Already have an account? Log In</a>
     </div>
 </div>
 </body>
