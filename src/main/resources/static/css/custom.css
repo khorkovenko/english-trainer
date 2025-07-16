@@ -31,54 +31,35 @@ input {
 .wave-btn {
     width: 280px;
     height: 60px;
-    display: -webkit-flex;
-    display: -moz-flex;
-    display: -ms-flex;
-    display: -o-flex;
-    display: flex !important;
-
+    display: flex;
     overflow: hidden;
-
     position: relative;
-
     transition: all 0.8s ease 0s;
-    -webkit-transition: all 0.8s ease 0s;
-    -moz-transition: all 0.8s ease 0s;
-    -ms-transition: all 0.8s ease 0s;
-    -o-transition: all 0.8s ease 0s;
-
-    justify-content:center;
+    justify-content: center;
     align-items: center;
-
     border-radius: 0 0 10px 10px;
     text-decoration: none;
 }
 
 .wave-btn:hover {
     border-radius: 10px;
-
     transition: all 0.8s ease 0.2s;
-    -webkit-transition: all 0.8s ease 0.2s;
-    -moz-transition: all 0.8s ease 0.2s;
-    -ms-transition: all 0.8s ease 0.2s;
-    -o-transition: all 0.8s ease 0.2s;
-
-    -webkit-box-shadow: 0 0 40px rgba(73, 115, 255, 0.6);
     box-shadow: 0 0 40px rgba(73, 115, 255, 0.6);
-
 }
-.wave-btn:hover .wave-btn-waves{
+
+.wave-btn:hover .wave-btn-waves {
     top: -50px;
 }
 
 .wave-btn-text {
-    font-family: "Special Gothic Expanded One", Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-family: "Special Gothic Expanded One", Arial, sans-serif;
     color: #fff;
     text-transform: uppercase;
     letter-spacing: 8px;
     position: relative;
     z-index: 1;
 }
+
 .wave-btn-waves {
     position: absolute;
     width: 280px;
@@ -86,84 +67,38 @@ input {
     background-color: #4973ff;
     top: 0;
     left: 0;
-    -webkit-box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
     box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
-
     transition: all 0.8s ease 0s;
-    -webkit-transition: all 0.8s ease 0s;
-    -moz-transition: all 0.8s ease 0s;
-    -ms-transition: all 0.8s ease 0s;
-    -o-transition: all 0.8s ease 0s;
 }
+
 .wave-btn-waves:after,
-.wave-btn-waves:before{
+.wave-btn-waves:before {
     content: '';
     position: absolute;
     top: 0;
     left: 50%;
     width: 250%;
     height: 250%;
-
-    transform: translate3d(-50%,-96%,0) rotate(0deg) scale(1);
-    -ms-transform: translate3d(-50%,-96%,0) rotate(0deg) scale(1);
+    transform: translate3d(-50%, -96%, 0) rotate(0deg) scale(1);
 }
 
-.wave-btn-waves:before{
+.wave-btn-waves:before {
     background-color: #000;
     border-radius: 48%;
-
     animation: waves 5s infinite linear;
-    -webkit-animation: waves 5s infinite linear;
-    -moz-animation: waves 5s infinite linear;
-    -o-animation: waves 5s infinite linear;
 }
-.wave-btn-waves:after{
-    background-color: rgba(0,0,0,0.5);
+
+.wave-btn-waves:after {
+    background-color: rgba(0, 0, 0, 0.5);
     border-radius: 44%;
-
     animation: waves 10s infinite linear;
-    -webkit-animation: waves 10s infinite linear;
-    -moz-animation: waves 10s infinite linear;
-    -o-animation: waves 10s infinite linear;
 }
 
-@keyframes waves{
-    0%{
-        transform: translate3d(-50%,-96%,0) rotate(0deg) scale(1);
-        -ms-transform: translate3d(-50%,-96%,0) rotate(0deg) scale(1);
+@keyframes waves {
+    0% {
+        transform: translate3d(-50%, -96%, 0) rotate(0deg) scale(1);
     }
-    100%{
-        transform: translate3d(-50%,-96%,0) rotate(360deg) scale(1);
-        -ms-transform: translate3d(-50%,-96%,0) rotate(360deg) scale(1);
-    }
-}
-@-webkit-keyframes waves{
-    0%{
-        transform: translate3d(-50%,-96%,0) rotate(0deg) scale(1);
-        -ms-transform: translate3d(-50%,-96%,0) rotate(0deg) scale(1);
-    }
-    100%{
-        transform: translate3d(-50%,-96%,0) rotate(360deg) scale(1);
-        -ms-transform: translate3d(-50%,-96%,0) rotate(360deg) scale(1);
-    }
-}
-@-moz-keyframes waves{
-    0%{
-        transform: translate3d(-50%,-96%,0) rotate(0deg) scale(1);
-        -ms-transform: translate3d(-50%,-96%,0) rotate(0deg) scale(1);
-    }
-    100%{
-        transform: translate3d(-50%,-96%,0) rotate(360deg) scale(1);
-        -ms-transform: translate3d(-50%,-96%,0) rotate(360deg) scale(1);
-    }
-}
-@-o-keyframes waves{
-    0%{
-        transform: translate3d(-50%,-96%,0) rotate(0deg) scale(1);
-        -ms-transform: translate3d(-50%,-96%,0) rotate(0deg) scale(1);
-    }
-    100%{
-        transform: translate3d(-50%,-96%,0) rotate(360deg) scale(1);
-        -ms-transform: translate3d(-50%,-96%,0) rotate(360deg) scale(1);
+    100% {
+        transform: translate3d(-50%, -96%, 0) rotate(360deg) scale(1);
     }
 }
