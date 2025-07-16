@@ -5,29 +5,80 @@
 </head>
 <body>
 <div class="center-div">
-    <h2>Sign Up</h2>
+    <h2>Sign Up to LingoPilot</h2>
     <form th:action="@{/signup}" method="post">
-        <div>
+        <div class="input-div">
             <label for="email">Email:</label>
-            <input type="text" id="email" name="email"
-                   placeholder="Enter your email"
-                   th:value="${email}" th:readonly="${email != null}" required>
+            <input
+                    type="text"
+                    id="email"
+                    name="email"
+                    class="input-actionable"
+                    placeholder="Enter your email"
+                    th:value="${email}"
+                    th:readonly="${email != null}"
+                    tabindex="1"
+                    required
+            >
         </div>
-        <div>
+        <div class="input-div">
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password"
-                   placeholder="Enter your password" required>
+            <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="input-actionable"
+                    placeholder="Enter your password"
+                    tabindex="2"
+                    required
+            >
         </div>
-        <div>
+        <div class="input-div">
             <label for="confirmPassword">Confirm Password:</label>
-            <input type="password" id="confirmPassword" name="confirmPassword"
-                   placeholder="Confirm your password" required>
+            <input
+                    type="password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    class="input-actionable"
+                    placeholder="Confirm your password"
+                    tabindex="3"
+                    required
+            >
         </div>
-        <button type="submit">Sign Up</button>
+        <a href="javascript:void(0)"
+           tabindex="4"
+           onclick="document.querySelector('form').submit();"
+           class="wave-btn mt10"
+        >
+            <span class="wave-btn-text">Sign Up <i class="fas fa-user-plus"></i></span>
+            <span class="wave-btn-waves" style="background-color: green;"></span>
+        </a>
     </form>
     <div>
-        <a th:href="@{/login}">Already have an account? Log In</a>
+        <a th:href="@{/oauth2/authorization/google}"
+           tabindex="5"
+           class="wave-btn mt10"
+        >
+            <span class="wave-btn-text">Log In <i class="fab fa-google"></i></span>
+            <span class="wave-btn-waves" style="background-color: red;"></span>
+        </a>
+        <a href="/login"
+           tabindex="6"
+           class="wave-btn mt10"
+        >
+            <span class="wave-btn-text">Log In <i class="fas fa-sign-in-alt"></i></span>
+            <span class="wave-btn-waves"></span>
+        </a>
     </div>
 </div>
+
+<script type="module">
+    import { handleTabNavigation } from './js/script.js';
+
+    document.addEventListener('DOMContentLoaded', () => {
+        handleTabNavigation(6);
+    });
+</script>
+
 </body>
 </html>

@@ -4,36 +4,38 @@
     <title>LingoPilot</title>
 </head>
 <body>
-<div>
+<div class="center-div">
     <h2>LingoPilot</h2>
     <form th:action="@{/login}" method="post">
-        <div>
+        <div class="input-div">
+            <label for="username">E-mail:</label>
             <input
                     type="text"
                     id="username"
                     name="username"
+                    class="input-actionable"
                     autocomplete="username"
                     tabindex="1"
                     required
             />
-            <label for="username">E-mail:</label>
         </div>
-        <div>
+        <div class="input-div">
+            <label for="password">Password:</label>
             <input
                     type="password"
                     id="password"
                     name="password"
+                    class="input-actionable"
                     autocomplete="current-password"
                     tabindex="2"
                     required
             />
-            <label for="password">Password:</label>
         </div>
         <div>
             <a href="javascript:void(0)"
                tabindex="3"
                onclick="document.querySelector('form').submit();"
-               class="wave-btn"
+               class="wave-btn mt10"
             >
                 <span class="wave-btn-text">Log In <i class="fas fa-sign-in-alt"></i></span>
                 <span class="wave-btn-waves"></span>
@@ -42,14 +44,14 @@
     </form>
     <a th:href="@{/oauth2/authorization/google}"
        tabindex="4"
-       class="wave-btn"
+       class="wave-btn mt10"
     >
         <span class="wave-btn-text">Log In <i class="fab fa-google"></i></span>
         <span class="wave-btn-waves" style="background-color: red;"></span>
     </a>
     <a th:href="@{/signup}"
        tabindex="5"
-       class="wave-btn"
+       class="wave-btn mt10"
     >
         <span class="wave-btn-text">Sign Up <i class="fas fa-user-plus"></i></span>
         <span class="wave-btn-waves" style="background-color: green;"></span>

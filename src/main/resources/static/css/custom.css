@@ -26,6 +26,38 @@ input {
     font-style: normal;
 }
 
+.mt10 {
+    margin-top: 10px;
+}
+
+.center-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* Input */
+.input-div {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    justify-content: flex-start;
+}
+
+.input-actionable {
+    height: 30px;
+    border-radius: 30px;
+    border: 2px solid #ccc;
+    padding: 10px;
+    outline: none;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.input-actionable:focus {
+    border-color: #4973ff;
+    box-shadow: 0 0 8px 2px #4973ff;
+}
 
 /* Main button */
 .wave-btn {
