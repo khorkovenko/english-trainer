@@ -18,7 +18,9 @@ public class AuthController {
     private final UserService userService;
 
     @GetMapping("/login")
-    public String loginPage() {
+    public String loginPage(Model model) {
+        model.addAttribute("pageTitle", "Log In to LingoPilot");
+
         return "login";
     }
 
@@ -48,18 +50,32 @@ public class AuthController {
     }
 
     @GetMapping("/user")
-    public String userPage() {
+    public String userPage(
+            Model model,
+            Authentication authentication
+    ) {
+        model.addAttribute("pageTitle", "User Dashboard - LingoPilot");
+        model.addAttribute("email", authentication.getName());
+
         return "user";
     }
 
     @GetMapping("/admin")
-    public String adminPage() {
+    public String adminPage(
+            Model model,
+            Authentication authentication
+    ) {
+        model.addAttribute("pageTitle", "Admin Dashboard - LingoPilot");
+        model.addAttribute("email", authentication.getName());
+
         return "admin";
     }
 
     @GetMapping("/signup")
     public String signUpForm(@RequestParam(required = false) String email, Model model) {
         model.addAttribute("email", email);
+        model.addAttribute("pageTitle", "Sign Up for LingoPilot");
+
         return "signup";
     }
 

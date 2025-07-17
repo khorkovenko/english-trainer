@@ -5,40 +5,31 @@
 </head>
 <body>
 <div>
-    <h2>Welcome, User!</h2>
+    <h2>
+        Welcome,
+        <span th:if="${email}" th:text="${email}">User</span>
+        <span th:unless="${email}">User</span>!
+    </h2>
     <a th:href="@{/logout}">Logout</a>
 </div>
 <div>
     <section id="vocabulary">
         <h3>Vocabulary</h3>
-        <p>Explore vocabulary-related content and improve your word knowledge.</p>
+        <div>
+
+        </div>
     </section>
     <section id="grammar">
         <h3>Grammar</h3>
-        <p>Learn and apply grammar rules to enhance your understanding of language structure.</p>
-        <div>
-            <button type="button" id="grammarDropdown" th:aria-expanded="false">Select a Grammar Rule</button>
-            <ul aria-labelledby="grammarDropdown">
-                <li><a href="/rules/PresentSimple">Present Simple</a></li>
-                <li><a href="/rules/PastSimple">Past Simple</a></li>
-                <li><a href="/rules/FutureSimple">Future Simple</a></li>
-                <li><a href="/rules/Articles">Articles</a></li>
-                <li><a href="/rules/ModalVerbs">Modal Verbs</a></li>
-                <li><a href="/rules/Conditionals">Conditionals</a></li>
-            </ul>
-        </div>
     </section>
     <section id="listening">
         <h3>Listening</h3>
-        <p>Practice your listening skills through engaging audio exercises and comprehension tasks.</p>
     </section>
     <section id="writing">
         <h3>Writing</h3>
-        <p>Develop your writing skills with structured exercises and prompts.</p>
     </section>
     <section id="mistakes">
         <h3>Mistakes</h3>
-        <p>Review common mistakes and learn how to avoid them.</p>
     </section>
 </div>
 </body>

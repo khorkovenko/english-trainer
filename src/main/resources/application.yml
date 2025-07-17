@@ -23,5 +23,10 @@ spring:
             user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
   messages:
     basename: messages
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
 server:
   port: 8080
