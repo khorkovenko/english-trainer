@@ -4,67 +4,151 @@
     <title>User Page</title>
 </head>
 <body>
-<div>
-    <h2>
-        Welcome,
-        <span th:if="${email}" th:text="${email}">User</span>
-        <span th:unless="${email}">User</span>!
-    </h2>    <a th:href="@{/logout}">Logout</a>
+<div class="user-header">
+        <h2 class="welcome-message">
+            <span th:if="${email}" th:text="${email}"></span>
+            <i class="fa-solid fa-key" style="color: yellow; cursor: pointer;" id="send-pass-to-email"></i>
+            <span th:unless="${email}">User</span>
+        </h2>
+
+        <a th:href="@{/logout}"
+           tabindex="5"
+           class="wave-btn"
+        >
+            <span class="wave-btn-text">Logout <i class="fa-solid fa-right-from-bracket"></i></span>
+            <span class="wave-btn-waves" style="background-color: red;"></span>
+        </a>
 </div>
 <div>
-    <section id="vocabulary">
-        <h3>Vocabulary</h3>
+    <section class="trainer-section" id="vocabulary">
+        <div class="trainer-section-header">
+            <h3>Vocabulary</h3>
+            <i class="fas fa-chevron-up dn"></i>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="trainer-section-content dn">
 
-        <div>
-            <input type="text" placeholder="Word">
-            <input type="text" placeholder="Explanation">
-            <a href="chatGPT">Check word with explanation provide additional context</a>
-            <button>Add</button>
+        </div>
+    </section>
+    <section class="trainer-section" id="grammar">
+        <div class="trainer-section-header">
+            <h3>Grammar</h3>
+            <i class="fas fa-chevron-up dn"></i>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="trainer-section-content dn">
 
-            <table>
-                <tr>
-                    <th>Word</th>
-                    <th>Explanation</th>
-                    <th>remove</th>
-                    <th>train</th>
-                </tr>
-                <tr>
-                    <td>bicicle</td>
-                    <td>two whelled leg ridden vehicle</td>
-                    <td><button>Remove</button></td>
-                    <td><button>Train</button></td>
-                </tr>
-            </table>
+        </div>
+    </section>
+    <section class="trainer-section" id="listening">
+        <div class="trainer-section-header">
+            <h3>Listening</h3>
+            <i class="fas fa-chevron-up dn"></i>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="trainer-section-content dn">
 
-            <div class="modal">
-                <input type="checkbox"> proMode
-                <span>time :</span>
-                <span>WPM :</span>
-                <span>accuracy actual:</span>
-                <span>accuracy real:</span>
-                <div>
+        </div>
+    </section>
+    <section class="trainer-section" id="writing">
+        <div class="trainer-section-header">
+            <h3>Writing</h3>
+            <i class="fas fa-chevron-up dn"></i>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="trainer-section-content dn">
+
+        </div>
+    </section>
+    <section class="trainer-section" id="mistakes">
+        <div class="trainer-section-header">
+            <h3>Mistakes</h3>
+            <i class="fas fa-chevron-up dn"></i>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="trainer-section-content dn">
+
+        </div>
+    </section>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const trainer = document.querySelectorAll('.trainer-section');
+        const headers = document.querySelectorAll('.trainer-section-header');
+        const content = document.querySelectorAll('.trainer-section-content');
+        const down = document.querySelectorAll('.fas.fa-chevron-down');
+        const up = document.querySelectorAll('.fas.fa-chevron-up');
+
+        for (let i = 0; i < headers.length; i++) {
+            headers[i].addEventListener('click', () => {
+                const isVisible = !content[i].classList.contains('dn');
+
+                for (let j = 0; j < content.length; j++) {
+                    if (i !== j) {
+                        content[j].classList.add('dn');
+                        down[j].classList.remove('dn');
+                        up[j].classList.add('dn');
+                        headers[j].style.position = '';
+                        headers[j].style.top = '';
+                        headers[j].style.borderBottom = '';
+                    }
+                }
+
+                content[i].classList.toggle('dn', isVisible);
+                down[i].classList.toggle('dn', !isVisible);
+                up[i].classList.toggle('dn', isVisible);
+                headers[i].style.position = isVisible ? '' : 'sticky';
+                headers[i].style.borderBottom = isVisible ? '' : '3px solid white';
+                headers[i].style.top = isVisible ? '' : '0';
+
+                if (!isVisible) {
+                    trainer[i].scrollIntoView({ behavior: 'auto', block: 'start' });
+                }
+            });
+        }
+
+        document.getElementById("send-pass-to-email").addEventListener("click", function() {
+            alert("Your password has been sent to your email.");
+        });
+    });
+</script>
+
+</body>
+</html>
+
+
+<!--        <div>-->
+<!--            <input type="text" placeholder="Word">-->
+<!--            <input type="text" placeholder="Explanation">-->
+<!--            <a href="chatGPT">Check word with explanation provide additional context</a>-->
+<!--            <button>Add</button>-->
+<!--            <table>-->
+<!--                <tr>-->
+<!--                    <th>Word</th>-->
+<!--                    <th>Explanation</th>-->
+<!--                    <th>remove</th>-->
+<!--                    <th>train</th>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>bicicle</td>-->
+<!--                    <td>two whelled leg ridden vehicle</td>-->
+<!--                    <td><button>Remove</button></td>-->
+<!--                    <td><button>Train</button></td>-->
+<!--                </tr>-->
+<!--            </table>-->
+<!--            <div class="modal">-->
+<!--                <input type="checkbox"> proMode-->
+<!--                <span>time :</span>-->
+<!--                <span>WPM :</span>-->
+<!--                <span>accuracy actual:</span>-->
+<!--                <span>accuracy real:</span>-->
+<!--                <div>-->
 <!--                    Here logic must be implemented to show the modal when I click train button inside modal will be shown
 dimmed words when I click correct dimmed letter highlighted in green else in red, I can press backspace to remove last letter
 when letter corrected it's highlighte in yellow so this affects accuracy calculation. when pro mode is on if I make a mistake I will
  start this phrase again with 0 time counter. WHen I hit first letter time starts to count WPM and accurary calculated real time -->
-                </div>
-            </div>
-
-        </div>
-
-    </section>
-    <section id="grammar">
-        <h3>Grammar</h3>
-    </section>
-    <section id="listening">
-        <h3>Listening</h3>
-    </section>
-    <section id="writing">
-        <h3>Writing</h3>
-    </section>
-    <section id="mistakes">
-        <h3>Mistakes</h3>
-    </section>
-</div>
-</body>
-</html>
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
