@@ -6,6 +6,9 @@
 <body>
 <div class="center-div">
     <h2>Sign Up to LingoPilot</h2>
+    <div th:if="${errorMessage}" class="a ad" role="alert">
+        <span th:text="${errorMessage}"></span>
+    </div>
     <form th:action="@{/signup}" method="post">
         <div class="input-div">
             <label for="email">Email:</label>

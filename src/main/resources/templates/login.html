@@ -6,6 +6,9 @@
 <body>
 <div class="center-div">
     <h2>LingoPilot</h2>
+    <div th:if="${param.error}" class="a ad" role="alert">
+        Invalid e-mail or password. Please try again.
+    </div>
     <form th:action="@{/login}" method="post">
         <div class="input-div">
             <label for="username">E-mail:</label>

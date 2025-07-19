@@ -41,6 +41,22 @@ input {
     display: none;
 }
 
+.a {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #ffffff;
+}
+
+.ad {
+    color: #ffffff;
+    background-color: #f44336;
+    border-color: #d32f2f;
+}
+
 /* Input */
 .input-div {
     display: flex;

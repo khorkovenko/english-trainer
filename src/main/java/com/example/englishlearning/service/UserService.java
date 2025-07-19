@@ -28,7 +28,7 @@ public class UserService {
                 existingUser.setPassword(encodedPassword);
                 userRepository.save(existingUser);
             } else {
-                throw new IllegalStateException("Email is already in use.");
+                throw new IllegalStateException("Registration failed.");
             }
         } else {
             String encodedPassword = passwordEncoder.encode(rawPassword);
