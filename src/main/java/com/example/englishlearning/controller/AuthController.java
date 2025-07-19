@@ -1,6 +1,5 @@
 package com.example.englishlearning.controller;
 
-import com.example.englishlearning.service.UserDetailsService;
 import com.example.englishlearning.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -57,7 +56,7 @@ public class AuthController {
         model.addAttribute("pageTitle", "User Dashboard - LingoPilot");
         model.addAttribute("email", authentication.getName());
 
-        return "user";
+        return "home";
     }
 
     @GetMapping("/admin")

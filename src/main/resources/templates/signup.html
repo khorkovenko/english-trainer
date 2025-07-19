@@ -53,24 +53,16 @@
            onclick="document.querySelector('form').submit();"
            class="wave-btn mt10"
         >
-            <span class="wave-btn-text">Sign Up <i class="fas fa-user-plus"></i></span>
-            <span class="wave-btn-waves" style="background-color: orange;"></span>
+            <span class="wave-btn-text">Buy <i class="fas fa-user-plus"></i></span>
+            <span class="wave-btn-waves" style="background-color: red;"></span>
         </a>
     </form>
     <div>
-        <a th:href="@{/oauth2/authorization/google}"
-           tabindex="5"
-           class="wave-btn mt10"
-        >
-            <span class="wave-btn-text">Log In <i class="fab fa-google"></i></span>
-            <span class="wave-btn-waves" style="background-color: blue;"></span>
-        </a>
         <a href="/login"
-           tabindex="6"
-           class="wave-btn mt10"
+           tabindex="5"
+           class="btn mt10"
         >
-            <span class="wave-btn-text">Log In <i class="fas fa-sign-in-alt"></i></span>
-            <span class="wave-btn-waves" style="background-color: green;"></span>
+            <span>Return <i class="fas fa-sign-in-alt"></i></span>
         </a>
     </div>
 </div>
@@ -78,9 +70,7 @@
 <script type="module">
     import { handleTabNavigation } from './js/script.js';
 
-    document.addEventListener('DOMContentLoaded', () => {
-        handleTabNavigation(6);
-    });
+    handleTabNavigation(5);
 </script>
 
 </body>
