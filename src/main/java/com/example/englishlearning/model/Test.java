@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 public class Test {
 
-    private Rule ruleName;
+    private Grammar grammarName;
     private String example;
 
 }

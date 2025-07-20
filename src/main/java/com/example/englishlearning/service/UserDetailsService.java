@@ -1,12 +1,12 @@
 package com.example.englishlearning.service;
 
+import com.example.englishlearning.model.Language;
 import com.example.englishlearning.model.User;
 import com.example.englishlearning.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
@@ -44,6 +44,10 @@ public class UserDetailsService implements org.springframework.security.core.use
     }
 
     public void saveUser(User user) {
+        if (user.getLanguage() == null) {
+            user.setLanguage(Language.ENGLISH);
+        }
+
         userRepository.save(user);
     }
 

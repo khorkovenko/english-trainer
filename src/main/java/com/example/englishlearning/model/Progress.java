@@ -12,7 +12,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class Progress {
 
-    private Map<Rule, Statistics> ruleKnowledge;
-    private Map<String, Statistics> wordKnowledge;
+    private Map<Grammar, Statistics> ruleKnowledge;
+    private Map<Vocabulary, Statistics> wordKnowledge;
 
 }

@@ -169,6 +169,9 @@ input {
         align-items: center;
         text-align: center;
     }
+    .trainer-container {
+        margin-top: 150px;
+    }
 }
 
 /* Main button */
@@ -246,3 +249,9 @@ input {
         transform: translate3d(-50%, -96%, 0) rotate(360deg) scale(1);
     }
 }
+
+/* Section content */
+.section-wrapper {
+
+}
+

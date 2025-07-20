@@ -27,6 +27,15 @@ function sectionAccordionListener(event) {
         const up = document.querySelectorAll('.fas.fa-chevron-up');
         const refresh = document.querySelectorAll('.fa-solid.fa-rotate');
 
+        const sectionInitializers = [
+            fetchVocabulary,
+            fetchGrammar,
+            fetchListening,
+            fetchWriting,
+            fetchSpeaking,
+            fetchMistakes,
+        ];
+
         for (let i = 0; i < headers.length; i++) {
             headers[i].addEventListener('click', () => {
                 const isVisible = !content[i].classList.contains('dn');
@@ -45,6 +54,16 @@ function sectionAccordionListener(event) {
                 content[i].classList.toggle('dn', isVisible);
                 down[i].classList.toggle('dn', !isVisible);
                 up[i].classList.toggle('dn', isVisible);
+
+                if (refresh[i].classList.contains('dn')) {
+                    refresh[i].addEventListener('click', (event) => {
+                        sectionInitializers[i]();
+                        event.preventDefault();
+                        event.stopPropagation();
+                    })
+                    sectionInitializers[i]();
+                }
+
                 refresh[i].classList.remove('dn');
                 headers[i].style.position = isVisible ? '' : 'sticky';
                 headers[i].style.borderBottom = isVisible ? '' : '3px solid white';
@@ -63,3 +82,51 @@ function sectionAccordionListener(event) {
 }
 
 export { sectionAccordionListener };
+
+function fetchVocabulary() {
+     const parentMain = document.getElementById("vocabulary");
+
+     const wrapper = document.createElement("div");
+     wrapper.classList.add("section-wrapper");
+     parentMain.appendChild(wrapper);
+
+}
+
+export { fetchVocabulary };
+
+function fetchGrammar() {
+        console.log("fetchGrammar");
+}
+
+export { fetchGrammar };
+
+function fetchListening() {
+        console.log("fetchListening");
+}
+
+export { fetchListening };
+
+function fetchWriting() {
+        console.log("fetchWriting");
+}
+
+export { fetchWriting };
+
+function fetchSpeaking() {
+        console.log("fetchSpeaking");
+}
+
+export { fetchSpeaking };
+
+function fetchMistakes() {
+        console.log("fetchMistakes");
+}
+
+export { fetchMistakes };
+
+function showAppModal(name, html) {
+        console.log("show modal");
+
+}
+
+export { showAppModal };

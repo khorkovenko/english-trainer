@@ -12,7 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class Mistakes {
 
-    private Set<Word> words;
-    private Set<Rule> rules;
+    private Set<Vocabulary> vocabularies;
+    private Set<Grammar> grammars;
 
 }
