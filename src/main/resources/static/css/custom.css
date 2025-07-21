@@ -141,14 +141,10 @@ input {
     align-items: center;
     padding: 0 20px;
     box-sizing: border-box;
+    background-color: black;
 
     border-top: 3px solid white;
     cursor: pointer;
-}
-
-.trainer-section-content {
-    /*height: 1500px;*/
-    width: 100%;
 }
 
 /* User header container */
@@ -250,8 +246,39 @@ input {
     }
 }
 
-/* Section content */
-.section-wrapper {
-
+/* vocabulary section content */
+#vocabulary-content {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
 }
 
+.left-vocabulary-actions {
+    border-right: 1px solid white;
+    width: 30%;
+    height: 30vh;
+}
+
+.right-vocabulary-table {
+    width: 70%;
+    height: 30vh;
+}
+
+@media (max-width: 768px) {
+    #vocabulary-content {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .left-vocabulary-actions {
+        width: 100%;
+        height: 30vh;
+    }
+
+    .right-vocabulary-table {
+        border: 1px solid white;
+        width: 100%;
+        height: 30vh;
+    }
+}

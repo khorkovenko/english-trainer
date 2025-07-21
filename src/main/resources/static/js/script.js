@@ -84,15 +84,19 @@ function sectionAccordionListener(event) {
 export { sectionAccordionListener };
 
 function fetchVocabulary() {
-     const parentMain = document.getElementById("vocabulary");
+    const parent = document.querySelector('#vocabulary-content');
 
-     const wrapper = document.createElement("div");
-     wrapper.classList.add("section-wrapper");
-     parentMain.appendChild(wrapper);
+    const leftDivAction = document.createElement('div');
+    leftDivAction.classList.add('left-vocabulary-actions');
+    const rightDivTable = document.createElement('div');
+    rightDivTable.classList.add('right-vocabulary-table');
 
+    parent.appendChild(leftDivAction);
+    parent.appendChild(rightDivTable);
 }
 
 export { fetchVocabulary };
+
 
 function fetchGrammar() {
         console.log("fetchGrammar");
