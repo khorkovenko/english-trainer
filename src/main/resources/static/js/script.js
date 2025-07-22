@@ -93,6 +93,29 @@ function fetchVocabulary() {
 
     parent.appendChild(leftDivAction);
     parent.appendChild(rightDivTable);
+
+    const wordDiv = document.createElement('div');
+    wordDiv.classList.add('word-div');
+    const wordInput = document.createElement('input');
+    wordInput.classList.add('word-input');
+    wordInput.placeholder = 'Enter word or phrase...';
+    const wordExplanation = document.createElement('textarea');
+    wordExplanation.classList.add('word-ta');
+    wordExplanation.style.resize = 'none';
+    wordExplanation.placeholder = 'Enter its explanation...';
+    const aHrefHelp = document.createElement('a');
+    aHrefHelp.classList.add('word-help-btn');
+    aHrefHelp.innerText = 'Help';
+    const addWordButton = document.createElement('button');
+    addWordButton.classList.add('word-add-btn');
+    addWordButton.innerText = 'Add word';
+
+    wordDiv.appendChild(wordInput);
+    wordDiv.appendChild(wordExplanation);
+    wordDiv.appendChild(aHrefHelp);
+    wordDiv.appendChild(addWordButton);
+
+    leftDivAction.appendChild(wordDiv);
 }
 
 export { fetchVocabulary };
