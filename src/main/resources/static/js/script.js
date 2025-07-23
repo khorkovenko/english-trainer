@@ -85,9 +85,11 @@ export { sectionAccordionListener };
 
 function fetchVocabulary() {
     const parent = document.querySelector('#vocabulary-content');
+    parent.innerHTML = '';
 
     const leftDivAction = document.createElement('div');
     leftDivAction.classList.add('left-vocabulary-actions');
+
     const rightDivTable = document.createElement('div');
     rightDivTable.classList.add('right-vocabulary-table');
 
@@ -96,16 +98,20 @@ function fetchVocabulary() {
 
     const wordDiv = document.createElement('div');
     wordDiv.classList.add('word-div');
+
     const wordInput = document.createElement('input');
     wordInput.classList.add('word-input');
     wordInput.placeholder = 'Enter word or phrase...';
+
     const wordExplanation = document.createElement('textarea');
     wordExplanation.classList.add('word-ta');
-    wordExplanation.style.resize = 'none';
     wordExplanation.placeholder = 'Enter its explanation...';
+    wordExplanation.style.resize = 'none';
+
     const aHrefHelp = document.createElement('a');
     aHrefHelp.classList.add('word-help-btn');
     aHrefHelp.innerText = 'Help';
+
     const addWordButton = document.createElement('button');
     addWordButton.classList.add('word-add-btn');
     addWordButton.innerText = 'Add word';
@@ -114,9 +120,139 @@ function fetchVocabulary() {
     wordDiv.appendChild(wordExplanation);
     wordDiv.appendChild(aHrefHelp);
     wordDiv.appendChild(addWordButton);
-
     leftDivAction.appendChild(wordDiv);
+
+    const renderTable = (vocabList) => {
+        rightDivTable.innerHTML = '';
+
+        const table = document.createElement('table');
+        table.classList.add('vocab-table');
+
+        const thead = document.createElement('thead');
+        thead.innerHTML = `
+            <tr class="vocab-header-row">
+                <th class="vocab-th">Word</th>
+                <th class="vocab-th">Explanation</th>
+                <th class="vocab-th">Actions</th>
+            </tr>
+        `;
+        table.appendChild(thead);
+
+        const tbody = document.createElement('tbody');
+
+        vocabList.forEach(word => {
+            const row = document.createElement('tr');
+            row.classList.add('vocab-row');
+
+            const wordCell = document.createElement('td');
+            wordCell.classList.add('vocab-td');
+            wordCell.innerText = word.word;
+
+            const explanationCell = document.createElement('td');
+            explanationCell.classList.add('vocab-td');
+            explanationCell.innerText = word.explanation;
+
+            const actionsCell = document.createElement('td');
+            actionsCell.classList.add('vocab-td');
+
+            const trainBtn = document.createElement('button');
+            trainBtn.classList.add('vocab-train-btn');
+            trainBtn.innerText = 'Train';
+            trainBtn.onclick = () => {
+                const modal = document.createElement('div');
+                modal.classList.add('vocab-modal');
+                modal.innerHTML = `
+                    <div class="vocab-modal-content">
+                        <span class="vocab-modal-close">&times;</span>
+                        <h2>${word.word}</h2>
+                        <p>${word.explanation}</p>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+
+                modal.querySelector('.vocab-modal-close').onclick = () => {
+                    modal.remove();
+                };
+            };
+
+            const removeBtn = document.createElement('button');
+            removeBtn.classList.add('vocab-remove-btn');
+            removeBtn.innerText = 'Remove';
+            removeBtn.onclick = () => {
+                if (confirm('Are you sure you want to remove this word?')) {
+                    fetch(`/vocabulary/${word.id}`, {
+                        method: 'DELETE'
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                loadVocabulary();
+                            } else {
+                                alert('Failed to remove word.');
+                            }
+                        });
+                }
+            };
+
+            actionsCell.appendChild(trainBtn);
+            actionsCell.appendChild(removeBtn);
+
+            row.appendChild(wordCell);
+            row.appendChild(explanationCell);
+            row.appendChild(actionsCell);
+
+            tbody.appendChild(row);
+        });
+
+        table.appendChild(tbody);
+        rightDivTable.appendChild(table);
+    };
+
+    const loadVocabulary = () => {
+        fetch('/vocabulary')
+            .then(response => response.json())
+            .then(data => renderTable(data));
+    };
+
+    addWordButton.onclick = () => {
+        const word = wordInput.value.trim();
+        const explanation = wordExplanation.value.trim();
+
+        if (!word || !explanation) {
+            alert('Both fields must be filled out.');
+            return;
+        }
+
+        const newWord = {
+            word: word,
+            explanation: explanation,
+            language: 'ENGLISH'
+        };
+
+        fetch('/vocabulary', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newWord)
+        })
+            .then(response => {
+                if (response.ok) {
+                    wordInput.value = '';
+                    wordExplanation.value = '';
+                    loadVocabulary();
+                } else {
+                    alert('Failed to add word.');
+                }
+            })
+            .catch(error => {
+                alert('Error while adding word.');
+                console.error(error);
+            });
+    };
+
+    loadVocabulary();
 }
+
 
 export { fetchVocabulary };
 

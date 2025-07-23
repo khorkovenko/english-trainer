@@ -55,9 +55,7 @@ public class VocabularyService {
             throw new RuntimeException("Cannot add more than 100 words for current language");
         }
 
-        if (newWord.getLanguage() != user.getLanguage()) {
-            throw new RuntimeException("Vocabulary language does not match user language");
-        }
+        newWord.setLanguage(user.getLanguage());
 
         boolean exists = user.getVocabulary().stream()
                 .anyMatch(v -> v.getLanguage() == user.getLanguage() &&

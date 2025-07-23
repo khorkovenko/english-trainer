@@ -304,7 +304,6 @@ input {
     box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
 }
 
-
 .word-ta:focus,
 .word-input:focus {
     outline: none;
@@ -333,17 +332,11 @@ input {
 
 .word-help-btn {
     background-color: red;
+    width: 50%;
 }
 
 .word-add-btn {
     background-color: green;
-}
-
-
-.word-ta:focus {
-    outline: none;
-    border: 2px solid green;
-    box-shadow: 0 0 8px 2px green;
 }
 
 @media (max-width: 768px) {
@@ -368,3 +361,98 @@ input {
 
     }
 }
+
+.left-vocabulary-actions {
+    width: 40%;
+    padding: 20px;
+    float: left;
+}
+
+.right-vocabulary-table {
+    width: 60%;
+    padding: 20px;
+    float: right;
+    overflow-x: auto;
+}
+
+.word-div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.word-input,
+.word-ta {
+    padding: 10px;
+    font-size: 16px;
+    width: 100%;
+}
+
+.word-add-btn,
+.word-help-btn,
+.vocab-train-btn,
+.vocab-remove-btn {
+    padding: 8px 12px;
+    cursor: pointer;
+    margin-right: 5px;
+    border-radius: 5px;
+    border: none;
+}
+
+.word-add-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.vocab-th,
+.vocab-td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+.vocab-header-row {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.vocab-row:hover {
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease;
+}
+
+.vocab-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.vocab-modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    width: 60%;
+    position: relative;
+}
+
+.vocab-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
