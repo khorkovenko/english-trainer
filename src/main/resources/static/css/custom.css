@@ -362,52 +362,11 @@ input {
     }
 }
 
-.left-vocabulary-actions {
-    width: 40%;
-    padding: 20px;
-    float: left;
-}
-
-.right-vocabulary-table {
-    width: 60%;
-    padding: 20px;
-    float: right;
-    overflow-x: auto;
-}
-
-.word-div {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.word-input,
-.word-ta {
-    padding: 10px;
-    font-size: 16px;
-    width: 100%;
-}
-
-.word-add-btn,
-.word-help-btn,
-.vocab-train-btn,
-.vocab-remove-btn {
-    padding: 8px 12px;
-    cursor: pointer;
-    margin-right: 5px;
-    border-radius: 5px;
-    border: none;
-}
-
-.word-add-btn {
-    background-color: #28a745;
-    color: white;
-}
-
 .vocab-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    overflow: auto;
 }
 
 .vocab-th,
@@ -418,12 +377,12 @@ input {
 }
 
 .vocab-header-row {
-    background-color: #f4f4f4;
+    background-color: yellow;
     font-weight: bold;
 }
 
 .vocab-row:hover {
-    background-color: #f9f9f9;
+    background-color: lightgray;
     transition: background-color 0.3s ease;
 }
 
