@@ -158,21 +158,228 @@ function fetchVocabulary() {
             const trainBtn = document.createElement('button');
             trainBtn.classList.add('vocab-train-btn');
             trainBtn.innerText = 'Train';
+
+
             trainBtn.onclick = () => {
+                let repeatCount = 0;
+                const phrase = `${word.word} - ${word.explanation}.`;
+                let currentIndex = 0;
+                let mistakes = 0;
+                let totalMistakes = 0;
+                let consecutiveMistakes = 0;
+                let correctedMistakes = 0;
+                let sessionStartTime = null;
+                let proMode = false;
+                let requiredRepeats = 1;
+                let isFocused = true;
+                let timerInterval;
+                let hasStarted = false;
+                let totalTime = 0;
+                let wasIncorrectBefore = [];
+
+
+                document.body.style.overflow = 'hidden';
+
                 const modal = document.createElement('div');
                 modal.classList.add('vocab-modal');
+                Object.assign(modal.style, {
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: 'white',
+                    zIndex: 10000,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    fontFamily: 'sans-serif',
+                });
+
                 modal.innerHTML = `
-                    <div class="vocab-modal-content">
-                        <span class="vocab-modal-close">&times;</span>
-                        <h2>${word.word}</h2>
-                        <p>${word.explanation}</p>
+                    <div id="modal-header" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 20px 30px; background: #f0f0f0; border-bottom: 2px solid #ccc; font-size: 20px;">
+                        <div>
+                            <strong>WPM:</strong> <span id="wpm">0</span> |
+                            <strong>Accuracy:</strong> <span id="accuracy">100%</span> |
+                            <strong>Real Accuracy:</strong> <span id="real-accuracy">100%</span> |
+                            <strong>Repeats Left:</strong> <span id="repeats-left">1</span> |
+                            <strong>Timer:</strong> <span id="timer">0.0s</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <label style="font-size: 18px;"><input type="checkbox" id="pro-mode" style="transform: scale(1.5); margin-right: 5px;" /> Pro Mode</label>
+                            <input id="repeat-count" type="number" value="1" min="1" style="width: 60px; font-size: 18px; padding: 5px;" />
+                            <button id="apply-repeats" style="font-size: 18px; padding: 6px 12px;">Apply</button>
+                            <button id="close-modal" style="font-size: 24px; padding: 6px 12px;">Close</button>
+                        </div>
+                    </div>
+                    <div id="typing-content" style="flex-grow: 1; display: flex; align-items: center; justify-content: center; font-size: 36px; font-family: monospace; padding: 40px;">
+                        <div id="text-wrapper" style="display: flex; flex-wrap: wrap; gap: 2px;"></div>
                     </div>
                 `;
+
                 document.body.appendChild(modal);
 
-                modal.querySelector('.vocab-modal-close').onclick = () => {
+                const closeModal = () => {
+                    clearInterval(timerInterval);
+                    document.removeEventListener('keydown', handleTyping);
+                    window.removeEventListener('focus', onFocus);
+                    window.removeEventListener('blur', onBlur);
                     modal.remove();
+                    document.body.style.overflow = '';
                 };
+
+                const wpmEl = document.getElementById('wpm');
+                const accuracyEl = document.getElementById('accuracy');
+                const realAccuracyEl = document.getElementById('real-accuracy');
+                const repeatInput = document.getElementById('repeat-count');
+                const textWrapper = document.getElementById('text-wrapper');
+                const proModeToggle = document.getElementById('pro-mode');
+                const applyBtn = document.getElementById('apply-repeats');
+                const repeatsLeftEl = document.getElementById('repeats-left');
+                const timerEl = document.getElementById('timer');
+                document.getElementById('close-modal').onclick = closeModal;
+
+                let charSpans = [];
+
+                const updateTimer = () => {
+                    if (sessionStartTime && isFocused && hasStarted) {
+                        const elapsed = ((Date.now() - sessionStartTime + totalTime) / 1000).toFixed(1);
+                        timerEl.textContent = `${elapsed}s`;
+                    }
+                };
+
+                const onFocus = () => isFocused = true;
+                const onBlur = () => isFocused = false;
+                window.addEventListener('focus', onFocus);
+                window.addEventListener('blur', onBlur);
+
+                const resetTrainer = () => {
+                    currentIndex = 0;
+                    mistakes = 0;
+                    correctedMistakes = 0;
+                    consecutiveMistakes = 0;
+                    hasStarted = false;
+
+
+                    textWrapper.innerHTML = '';
+                    charSpans = phrase.split('').map((char, i) => {
+                        const span = document.createElement('span');
+                        span.dataset.index = i;
+                        span.textContent = char === ' ' ? '\u00A0' : char;
+                        Object.assign(span.style, {
+                            padding: '6px 8px',
+                            borderRadius: '4px',
+                            backgroundColor: 'transparent',
+                        });
+                        textWrapper.appendChild(span);
+                        return span;
+                    });
+                    updateCursor();
+                };
+
+                const updateStats = () => {
+                    const totalElapsed = (Date.now() - sessionStartTime + totalTime) / 60000;
+                    const wpm = totalElapsed > 0 ? Math.round(((phrase.length * repeatCount) / 5) / totalElapsed) : 0;
+                    const total = currentIndex + mistakes;
+                    const acc = total > 0 ? Math.round((currentIndex / total) * 100) : 100;
+                    const realTotal = phrase.length * parseInt(repeatInput.value);
+                    const realAcc = Math.max(0, 100 - Math.floor((totalMistakes / realTotal) * 100));
+                    wpmEl.textContent = wpm;
+                    accuracyEl.textContent = `${acc}%`;
+                    realAccuracyEl.textContent = `${realAcc}%`;
+                };
+
+                const updateCursor = () => {
+                    charSpans.forEach(span => span.style.borderBottom = 'none');
+                    const current = charSpans[currentIndex];
+                    if (current) current.style.borderBottom = '2px solid black';
+                };
+
+                const handleTyping = (e) => {
+                    if (!hasStarted && e.key.length === 1) {
+                        hasStarted = true;
+                        sessionStartTime = Date.now();
+                        clearInterval(timerInterval);
+                        timerInterval = setInterval(updateTimer, 100);
+                    }
+
+                    if (e.key === ' ' || e.key === 'Backspace') e.preventDefault();
+
+                    if (e.key === 'Backspace') {
+                        if (currentIndex > 0) {
+                            currentIndex--;
+                            const span = charSpans[currentIndex];
+                            if (span.style.backgroundColor === 'red') {
+                                wasIncorrectBefore[currentIndex] = true;
+                            }
+                            span.style.backgroundColor = 'transparent';
+                            updateCursor();
+                        }
+                        return;
+                    }
+
+                    if (e.key.length !== 1 || currentIndex >= phrase.length) return;
+
+                    const expected = phrase[currentIndex];
+                    const span = charSpans[currentIndex];
+                    const wasIncorrect = span.style.backgroundColor === 'red' || span.style.backgroundColor === 'yellow' || wasIncorrectBefore[currentIndex];
+
+                    if ((expected === ' ' && e.key === ' ') || e.key === expected) {
+                        if (wasIncorrect) {
+                            span.style.backgroundColor = 'yellow';
+                            correctedMistakes++;
+                        } else {
+                            span.style.backgroundColor = 'green';
+                        }
+                        currentIndex++;
+                        consecutiveMistakes = 0;
+                    } else {
+                        totalMistakes++;
+                        span.style.backgroundColor = 'red';
+                        wasIncorrectBefore[currentIndex] = true;
+                        mistakes++;
+                        consecutiveMistakes++;
+                        currentIndex++;
+                        if (proMode || consecutiveMistakes >= 5) {
+                            resetTrainer();
+                            return;
+                        }
+                    }
+
+                    updateStats();
+                    updateCursor();
+
+                    if (currentIndex === phrase.length) {
+                        repeatCount++;
+                        requiredRepeats--;
+                        repeatsLeftEl.textContent = requiredRepeats;
+                        totalTime += Date.now() - sessionStartTime;
+                        hasStarted = false;
+
+                        if (requiredRepeats <= 0) {
+                            clearInterval(timerInterval);
+                            const totalElapsed = (totalTime / 1000).toFixed(1);
+                            alert(`Completed!\nWPM: ${wpmEl.textContent}\nAccuracy: ${accuracyEl.textContent}\nReal Accuracy: ${realAccuracyEl.textContent}\nTime: ${totalElapsed}s\nRepeats: ${repeatInput.value}`);
+                            closeModal();
+                        } else {
+                            resetTrainer();
+                        }
+                    }
+                };
+
+                proModeToggle.addEventListener('change', () => {
+                    proMode = proModeToggle.checked;
+                });
+
+                applyBtn.addEventListener('click', () => {
+                    requiredRepeats = parseInt(repeatInput.value);
+                    repeatsLeftEl.textContent = requiredRepeats;
+                    repeatCount = 0;
+                    totalTime = 0;
+                    resetTrainer();
+                });
+
+                document.addEventListener('keydown', handleTyping);
+                resetTrainer();
             };
 
             const removeBtn = document.createElement('button');
