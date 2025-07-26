@@ -131,7 +131,7 @@ function fetchVocabulary() {
         const thead = document.createElement('thead');
         thead.innerHTML = `
             <tr class="vocab-header-row">
-                <th class="vocab-th">Word</th>
+                <th class="vocab-th">Word or Phrase</th>
                 <th class="vocab-th">Explanation</th>
                 <th class="vocab-th">Actions</th>
             </tr>
@@ -159,7 +159,6 @@ function fetchVocabulary() {
             trainBtn.classList.add('vocab-train-btn');
             trainBtn.innerText = 'Train';
 
-
             trainBtn.onclick = () => {
                 let repeatCount = 0;
                 const phrase = `${word.word} - ${word.explanation}.`;
@@ -176,7 +175,8 @@ function fetchVocabulary() {
                 let hasStarted = false;
                 let totalTime = 0;
                 let wasIncorrectBefore = [];
-
+                let attemptTimes = [];
+                let attemptNumber = 0;
 
                 document.body.style.overflow = 'hidden';
 
@@ -196,25 +196,26 @@ function fetchVocabulary() {
                 });
 
                 modal.innerHTML = `
-                    <div id="modal-header" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 20px 30px; background: #f0f0f0; border-bottom: 2px solid #ccc; font-size: 20px;">
-                        <div>
-                            <strong>WPM:</strong> <span id="wpm">0</span> |
-                            <strong>Accuracy:</strong> <span id="accuracy">100%</span> |
-                            <strong>Real Accuracy:</strong> <span id="real-accuracy">100%</span> |
-                            <strong>Repeats Left:</strong> <span id="repeats-left">1</span> |
-                            <strong>Timer:</strong> <span id="timer">0.0s</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <label style="font-size: 18px;"><input type="checkbox" id="pro-mode" style="transform: scale(1.5); margin-right: 5px;" /> Pro Mode</label>
-                            <input id="repeat-count" type="number" value="1" min="1" style="width: 60px; font-size: 18px; padding: 5px;" />
-                            <button id="apply-repeats" style="font-size: 18px; padding: 6px 12px;">Apply</button>
-                            <button id="close-modal" style="font-size: 24px; padding: 6px 12px;">Close</button>
-                        </div>
-                    </div>
-                    <div id="typing-content" style="flex-grow: 1; display: flex; align-items: center; justify-content: center; font-size: 36px; font-family: monospace; padding: 40px;">
-                        <div id="text-wrapper" style="display: flex; flex-wrap: wrap; gap: 2px;"></div>
-                    </div>
-                `;
+        <div id="modal-header" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 20px 30px; background: #f0f0f0; border-bottom: 2px solid #ccc; font-size: 20px;">
+            <div>
+                <strong>WPM:</strong> <span id="wpm">0</span> |
+                <strong>Accuracy:</strong> <span id="accuracy">100%</span> |
+                <strong>Real Accuracy:</strong> <span id="real-accuracy">100%</span> |
+                <strong>Repeats Left:</strong> <span id="repeats-left">1</span> |
+                <strong>Attempt:</strong> <span id="attempt-number">0</span> |
+                <strong>Timer:</strong> <span id="timer">0.0s</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <label style="font-size: 18px;"><input type="checkbox" id="pro-mode" style="transform: scale(1.5); margin-right: 5px;" /> Pro Mode</label>
+                <input id="repeat-count" type="number" value="1" min="1" style="width: 60px; font-size: 18px; padding: 5px;" />
+                <button id="apply-repeats" style="font-size: 18px; padding: 6px 12px;">Apply</button>
+                <button id="close-modal" style="font-size: 24px; padding: 6px 12px;">&times;</button>
+            </div>
+        </div>
+        <div id="typing-content" style="flex-grow: 1; display: flex; align-items: center; justify-content: center; font-size: 36px; font-family: monospace; padding: 40px;">
+            <div id="text-wrapper" style="display: flex; flex-wrap: wrap; gap: 2px;"></div>
+        </div>
+    `;
 
                 document.body.appendChild(modal);
 
@@ -236,6 +237,7 @@ function fetchVocabulary() {
                 const applyBtn = document.getElementById('apply-repeats');
                 const repeatsLeftEl = document.getElementById('repeats-left');
                 const timerEl = document.getElementById('timer');
+                const attemptNumberEl = document.getElementById('attempt-number');
                 document.getElementById('close-modal').onclick = closeModal;
 
                 let charSpans = [];
@@ -258,7 +260,7 @@ function fetchVocabulary() {
                     correctedMistakes = 0;
                     consecutiveMistakes = 0;
                     hasStarted = false;
-
+                    wasIncorrectBefore = [];
 
                     textWrapper.innerHTML = '';
                     charSpans = phrase.split('').map((char, i) => {
@@ -340,6 +342,11 @@ function fetchVocabulary() {
                         consecutiveMistakes++;
                         currentIndex++;
                         if (proMode || consecutiveMistakes >= 5) {
+                            if (proMode && hasStarted && sessionStartTime) {
+                                attemptTimes.push(Date.now() - sessionStartTime);
+                                attemptNumber++;
+                                attemptNumberEl.textContent = attemptNumber;
+                            }
                             resetTrainer();
                             return;
                         }
@@ -352,13 +359,17 @@ function fetchVocabulary() {
                         repeatCount++;
                         requiredRepeats--;
                         repeatsLeftEl.textContent = requiredRepeats;
-                        totalTime += Date.now() - sessionStartTime;
+                        const elapsed = Date.now() - sessionStartTime;
+                        totalTime += elapsed;
+                        attemptTimes.push(elapsed);
+                        attemptNumber++;
+                        attemptNumberEl.textContent = attemptNumber;
                         hasStarted = false;
 
                         if (requiredRepeats <= 0) {
                             clearInterval(timerInterval);
                             const totalElapsed = (totalTime / 1000).toFixed(1);
-                            alert(`Completed!\nWPM: ${wpmEl.textContent}\nAccuracy: ${accuracyEl.textContent}\nReal Accuracy: ${realAccuracyEl.textContent}\nTime: ${totalElapsed}s\nRepeats: ${repeatInput.value}`);
+                            alert(`Completed!\nWPM: ${wpmEl.textContent}\nAccuracy: ${accuracyEl.textContent}\nReal Accuracy: ${realAccuracyEl.textContent}\nTime: ${totalElapsed}s\nRepeats: ${repeatInput.value}\nAttempts: ${attemptNumber}`);
                             closeModal();
                         } else {
                             resetTrainer();
@@ -375,12 +386,18 @@ function fetchVocabulary() {
                     repeatsLeftEl.textContent = requiredRepeats;
                     repeatCount = 0;
                     totalTime = 0;
+                    sessionStartTime = null;
+                    attemptTimes = [];
+                    attemptNumber = 0;
+                    attemptNumberEl.textContent = attemptNumber;
+                    clearInterval(timerInterval);
                     resetTrainer();
                 });
 
                 document.addEventListener('keydown', handleTyping);
                 resetTrainer();
             };
+
 
             const removeBtn = document.createElement('button');
             removeBtn.classList.add('vocab-remove-btn');
