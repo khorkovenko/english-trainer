@@ -111,6 +111,28 @@ function fetchVocabulary() {
     const aHrefHelp = document.createElement('a');
     aHrefHelp.classList.add('word-help-btn');
     aHrefHelp.innerText = 'Help';
+    aHrefHelp.href = '#';
+
+    aHrefHelp.addEventListener('click', (event) => {
+        event.preventDefault();
+
+        const word = wordInput.value.trim();
+        const explanation = wordExplanation.value.trim();
+
+        if (!word) {
+            alert('Please enter a word or phrase.');
+            return;
+        }
+
+        const prompt = `Please explain the word or phrase "${word}". 
+            "${explanation.length === 0 ? '\n' : 'I think it means: ' + explanation + '. Is this correct? If not, provide a corrected explanation.'}".
+            Also, provide:
+            - Multiple meanings or contexts if applicable.
+            - Example usage in dialogues or sentences.`;
+
+            const encodedPrompt = encodeURIComponent(prompt);
+            window.open(`https://www.perplexity.ai/search?q=${encodedPrompt}`, '_blank');
+        });
 
     const addWordButton = document.createElement('button');
     addWordButton.classList.add('word-add-btn');
@@ -161,7 +183,7 @@ function fetchVocabulary() {
 
             trainBtn.onclick = () => {
                 let repeatCount = 0;
-                const phrase = `${word.word} - ${word.explanation}.`;
+                const phrase = `${word.word} - ${word.explanation}`;
                 let currentIndex = 0;
                 let mistakes = 0;
                 let totalMistakes = 0;

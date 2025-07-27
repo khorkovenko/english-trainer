@@ -35,5 +35,5 @@ public class User {
 
     private Mistakes mistakes;
 
-    private List<Vocabulary> vocabulary = new ArrayList<>();
+    private List<String> vocabulary = new ArrayList<>();
 }

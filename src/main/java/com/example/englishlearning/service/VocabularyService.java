@@ -3,17 +3,21 @@ package com.example.englishlearning.service;
 import com.example.englishlearning.model.User;
 import com.example.englishlearning.model.Vocabulary;
 import com.example.englishlearning.repository.UserRepository;
+import com.example.englishlearning.repository.VocabularyRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class VocabularyService {
 
     private final UserRepository userRepository;
+    private final VocabularyRepository vocabularyRepository;
 
     private User getCurrentUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -23,69 +27,64 @@ public class VocabularyService {
 
     public List<Vocabulary> getAllWords() {
         User user = getCurrentUser();
-        if (user.getVocabulary() == null) {
+        List<String> vocabIds = user.getVocabulary();
+        if (vocabIds == null || vocabIds.isEmpty()) {
             return Collections.emptyList();
         }
-        return user.getVocabulary().stream()
-                .filter(vocab -> vocab.getLanguage() == user.getLanguage())
-                .toList();
+        return vocabularyRepository.findAllByIdInAndLanguage(vocabIds, user.getLanguage());
     }
 
     public Vocabulary getWordById(String wordId) {
         User user = getCurrentUser();
-        return user.getVocabulary().stream()
-                .filter(vocab -> vocab.getLanguage() == user.getLanguage())
-                .filter(vocab -> vocab.getId().equals(wordId))
-                .findFirst()
+        if (user.getVocabulary() == null || !user.getVocabulary().contains(wordId)) {
+            throw new RuntimeException("Word not found in user's vocabulary list");
+        }
+        return vocabularyRepository.findById(wordId)
+                .filter(v -> v.getLanguage() == user.getLanguage())
                 .orElseThrow(() -> new RuntimeException("Word not found"));
     }
 
     public void addWord(Vocabulary newWord) {
         User user = getCurrentUser();
 
-        if (user.getVocabulary() == null) {
-            user.setVocabulary(new ArrayList<>());
-        }
+        List<String> vocabIds = user.getVocabulary() != null ? user.getVocabulary() : new ArrayList<>();
+        List<Vocabulary> userVocab = vocabularyRepository.findAllByIdInAndLanguage(vocabIds, user.getLanguage());
 
-        long countForLanguage = user.getVocabulary().stream()
-                .filter(v -> v.getLanguage() == user.getLanguage())
-                .count();
-
-        if (countForLanguage >= 100) {
+        if (userVocab.size() >= 100) {
             throw new RuntimeException("Cannot add more than 100 words for current language");
         }
 
-        newWord.setLanguage(user.getLanguage());
-
-        boolean exists = user.getVocabulary().stream()
-                .anyMatch(v -> v.getLanguage() == user.getLanguage() &&
-                                v.getWord().equalsIgnoreCase(newWord.getWord()));
-
+        boolean exists = userVocab.stream()
+                .anyMatch(v -> v.getWord().equalsIgnoreCase(newWord.getWord()));
         if (exists) {
             throw new RuntimeException("Word already exists in your vocabulary");
         }
 
-        user.getVocabulary().add(newWord);
+        newWord.setLanguage(user.getLanguage());
+        Vocabulary saved = vocabularyRepository.save(newWord);
+
+        vocabIds.add(saved.getId());
+        user.setVocabulary(vocabIds);
         userRepository.save(user);
     }
 
     public void removeWordById(String wordId) {
         User user = getCurrentUser();
-
-        if (user.getVocabulary() != null) {
-            user.getVocabulary().removeIf(vocab ->
-                    vocab.getLanguage() == user.getLanguage() &&
-                    vocab.getId().equals(wordId)
-            );
+        List<String> vocabIds = user.getVocabulary();
+        if (vocabIds != null && vocabIds.remove(wordId)) {
             userRepository.save(user);
+            vocabularyRepository.deleteById(wordId);
         }
     }
 
     public void removeAllWords() {
         User user = getCurrentUser();
-
-        if (user.getVocabulary() != null) {
-            user.getVocabulary().removeIf(vocab -> vocab.getLanguage() == user.getLanguage());
+        List<String> vocabIds = user.getVocabulary();
+        if (vocabIds != null && !vocabIds.isEmpty()) {
+            List<Vocabulary> toDelete = vocabularyRepository.findAllByIdInAndLanguage(vocabIds, user.getLanguage());
+            List<String> idsToDelete = toDelete.stream().map(Vocabulary::getId).toList();
+            vocabularyRepository.deleteAllById(idsToDelete);
+            user.setVocabulary(new ArrayList<>());
             userRepository.save(user);
         }
     }
