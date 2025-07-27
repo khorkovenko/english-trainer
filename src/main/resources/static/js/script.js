@@ -509,6 +509,40 @@ function fetchGrammar() {
     const headerGrammarContent = document.createElement('div');
     grammarContent.appendChild(headerGrammarContent);
 
+    const grammarRuleName = document.createElement('input');
+    grammarRuleName.placeholder = 'Enter grammar rule name...';
+    grammarRuleName.classList.add('grammar-input');
+    const grammarRuleHtml = document.createElement('input');
+    grammarRuleHtml.placeholder = 'Rule explanation in HTML format...';
+    grammarRuleHtml.classList.add('grammar-input');
+    const grammarHelpBtn = document.createElement('button');
+    grammarHelpBtn.innerText = 'Help';
+    grammarHelpBtn.classList.add('grammar-button');
+
+    const grammarAddBtn = document.createElement('button');
+    grammarAddBtn.innerText = 'Add';
+    grammarAddBtn.classList.add('grammar-button');
+
+    const findRule = document.createElement('input');
+    findRule.placeholder = 'Enter grammar rule name to filter table...';
+    findRule.classList.add('grammar-input');
+    const findBtn = document.createElement('button');
+    findBtn.innerText = 'Find';
+    findBtn.classList.add('grammar-button');
+    const resetBtn = document.createElement('button');
+    resetBtn.innerText = 'Reset';
+    resetBtn.classList.add('grammar-button');
+
+
+    headerGrammarContent.appendChild(grammarRuleName);
+    headerGrammarContent.appendChild(grammarRuleHtml);
+    headerGrammarContent.appendChild(grammarHelpBtn);
+    headerGrammarContent.appendChild(grammarAddBtn);
+
+    headerGrammarContent.appendChild(findRule);
+    headerGrammarContent.appendChild(findBtn);
+    headerGrammarContent.appendChild(resetBtn);
+
 }
 
 export { fetchGrammar };
