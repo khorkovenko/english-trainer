@@ -510,3 +510,95 @@ input {
         margin-right: 0;
     }
 }
+
+.grammar-input,
+.grammar-button {
+    height: 44px;
+    box-sizing: border-box;
+    margin: 10px 10px 0 0;
+    font-size: 14px;
+    border-radius: 8px;
+}
+
+.grammar-input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    width: 300px;
+}
+
+.grammar-input:focus {
+    border-color: #4a90e2;
+    outline: none;
+}
+
+.grammar-button {
+    padding: 0 16px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.grammar-button:hover {
+    background-color: #357ABD;
+}
+
+/* Table styling */
+.grammar-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.grammar-table th,
+.grammar-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.grammar-table th {
+    background-color: blue;
+}
+
+/* Modal styling */
+#grammar-modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background: rgba(0,0,0,0.6);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 800px;
+}
+
+.modal-close {
+    float: right;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+/* Responsive behavior */
+@media (max-width: 600px) {
+    .grammar-input,
+    .grammar-button {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .modal-content {
+        width: 95%;
+    }
+}

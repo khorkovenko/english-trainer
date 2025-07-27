@@ -502,48 +502,152 @@ function fetchVocabulary() {
 
 export { fetchVocabulary };
 
+let grammarData = [];
 
 function fetchGrammar() {
     const grammarContent = document.getElementById('grammar-content');
     grammarContent.innerHTML = '';
+
     const headerGrammarContent = document.createElement('div');
     grammarContent.appendChild(headerGrammarContent);
 
-    const grammarRuleName = document.createElement('input');
-    grammarRuleName.placeholder = 'Enter grammar rule name...';
-    grammarRuleName.classList.add('grammar-input');
-    const grammarRuleHtml = document.createElement('input');
-    grammarRuleHtml.placeholder = 'Rule explanation in HTML format...';
-    grammarRuleHtml.classList.add('grammar-input');
-    const grammarHelpBtn = document.createElement('button');
-    grammarHelpBtn.innerText = 'Help';
-    grammarHelpBtn.classList.add('grammar-button');
+    // Create Inputs & Buttons
+    const grammarRuleName = createInput('Enter grammar rule name...');
+    const grammarRuleHtml = createInput('Rule explanation in HTML format...');
+    const findRule = createInput('Enter grammar rule name to filter table...');
 
-    const grammarAddBtn = document.createElement('button');
-    grammarAddBtn.innerText = 'Add';
-    grammarAddBtn.classList.add('grammar-button');
+    const grammarHelpBtn = createButton('Help', async () => {
+        if (!grammarRuleName.value) return alert('Please enter rule name for help!');
+        const prompt = `Create an adaptive HTML table explaining the grammar rule: "${grammarRuleName.value}", with sample usages. Style it responsively for all screen sizes.`;
+        window.open(`https://chat.openai.com/?model=gpt-4&prompt=${encodeURIComponent(prompt)}`, '_blank');
+    });
 
-    const findRule = document.createElement('input');
-    findRule.placeholder = 'Enter grammar rule name to filter table...';
-    findRule.classList.add('grammar-input');
-    const findBtn = document.createElement('button');
-    findBtn.innerText = 'Find';
-    findBtn.classList.add('grammar-button');
-    const resetBtn = document.createElement('button');
-    resetBtn.innerText = 'Reset';
-    resetBtn.classList.add('grammar-button');
+    const grammarAddBtn = createButton('Add', () => {
+        const name = grammarRuleName.value.trim();
+        const html = grammarRuleHtml.value.trim();
+        if (!name || !html) return alert('Both rule name and explanation must be provided!');
+        fetch('/grammar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ruleName: name, ruleExplanation: html, language: "ENGLISH" }) // adjust as needed
+        }).then(() => {
+            grammarRuleName.value = '';
+            grammarRuleHtml.value = '';
+            loadGrammarTable();
+        });
+    });
 
+    const findBtn = createButton('Find', () => filterTable(findRule.value.trim()));
+    const resetBtn = createButton('Reset', () => {
+        findRule.value = '';
+        loadGrammarTable();
+    });
 
-    headerGrammarContent.appendChild(grammarRuleName);
-    headerGrammarContent.appendChild(grammarRuleHtml);
-    headerGrammarContent.appendChild(grammarHelpBtn);
-    headerGrammarContent.appendChild(grammarAddBtn);
+    // Assemble header
+    [grammarRuleName, grammarRuleHtml, grammarHelpBtn, grammarAddBtn, findRule, findBtn, resetBtn]
+        .forEach(el => headerGrammarContent.appendChild(el));
 
-    headerGrammarContent.appendChild(findRule);
-    headerGrammarContent.appendChild(findBtn);
-    headerGrammarContent.appendChild(resetBtn);
+    // Table container
+    const tableContainer = document.createElement('div');
+    tableContainer.id = 'grammar-table-container';
+    grammarContent.appendChild(tableContainer);
 
+    // Modal for displaying HTML
+    createModal();
+
+    loadGrammarTable();
 }
+
+function createInput(placeholder) {
+    const input = document.createElement('input');
+    input.placeholder = placeholder;
+    input.classList.add('grammar-input');
+    return input;
+}
+
+function createButton(text, handler) {
+    const btn = document.createElement('button');
+    btn.innerText = text;
+    btn.classList.add('grammar-button');
+    btn.onclick = handler;
+    return btn;
+}
+
+function loadGrammarTable() {
+    fetch('/grammar')
+        .then(res => res.json())
+        .then(data => {
+            grammarData = data;
+            renderTable(grammarData);
+        });
+}
+
+function renderTable(data) {
+    const container = document.getElementById('grammar-table-container');
+    container.innerHTML = '';
+    const table = document.createElement('table');
+    table.className = 'grammar-table';
+
+    const thead = document.createElement('thead');
+    thead.innerHTML = `
+        <tr>
+            <th>Grammar Rule</th>
+            <th>Actions</th>
+        </tr>`;
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+    data.forEach(rule => {
+        const row = document.createElement('tr');
+
+        const ruleNameCell = document.createElement('td');
+        ruleNameCell.textContent = rule.ruleName;
+
+        const actionsCell = document.createElement('td');
+        actionsCell.appendChild(createButton('Show', () => showModal(rule.ruleExplanation)));
+        actionsCell.appendChild(createButton('Train', () => {
+            const prompt = `Create a quiz with 10 questions for the grammar rule: "${rule.ruleName}". Explanation:\n${rule.ruleExplanation}`;
+            window.open(`https://chat.openai.com/?model=gpt-4&prompt=${encodeURIComponent(prompt)}`, '_blank');
+        }));
+        actionsCell.appendChild(createButton('Remove', () => {
+            fetch(`/grammar/${rule.id}`, { method: 'DELETE' })
+                .then(() => loadGrammarTable());
+        }));
+
+        row.appendChild(ruleNameCell);
+        row.appendChild(actionsCell);
+        tbody.appendChild(row);
+    });
+
+    table.appendChild(tbody);
+    container.appendChild(table);
+}
+
+function filterTable(keyword) {
+    if (!keyword) return renderTable(grammarData);
+    const filtered = grammarData.filter(rule =>
+        rule.ruleName.toLowerCase().includes(keyword.toLowerCase())
+    );
+    renderTable(filtered);
+}
+
+function createModal() {
+    const modal = document.createElement('div');
+    modal.id = 'grammar-modal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <span class="modal-close" onclick="document.getElementById('grammar-modal').style.display='none'">&times;</span>
+            <div id="modal-body"></div>
+        </div>`;
+    document.body.appendChild(modal);
+}
+
+function showModal(htmlContent) {
+    document.getElementById('modal-body').innerHTML = htmlContent;
+    document.getElementById('grammar-modal').style.display = 'block';
+}
+
+
 
 export { fetchGrammar };
 

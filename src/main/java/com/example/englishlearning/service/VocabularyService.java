@@ -27,7 +27,7 @@ public class VocabularyService {
 
     public List<Vocabulary> getAllWords() {
         User user = getCurrentUser();
-        List<String> vocabIds = user.getVocabulary();
+        List<String> vocabIds = user.getVocabularyIds();
         if (vocabIds == null || vocabIds.isEmpty()) {
             return Collections.emptyList();
         }
@@ -36,7 +36,7 @@ public class VocabularyService {
 
     public Vocabulary getWordById(String wordId) {
         User user = getCurrentUser();
-        if (user.getVocabulary() == null || !user.getVocabulary().contains(wordId)) {
+        if (user.getVocabularyIds() == null || !user.getVocabularyIds().contains(wordId)) {
             throw new RuntimeException("Word not found in user's vocabulary list");
         }
         return vocabularyRepository.findById(wordId)
@@ -47,7 +47,7 @@ public class VocabularyService {
     public void addWord(Vocabulary newWord) {
         User user = getCurrentUser();
 
-        List<String> vocabIds = user.getVocabulary() != null ? user.getVocabulary() : new ArrayList<>();
+        List<String> vocabIds = user.getVocabularyIds() != null ? user.getVocabularyIds() : new ArrayList<>();
         List<Vocabulary> userVocab = vocabularyRepository.findAllByIdInAndLanguage(vocabIds, user.getLanguage());
 
         if (userVocab.size() >= 100) {
@@ -64,13 +64,13 @@ public class VocabularyService {
         Vocabulary saved = vocabularyRepository.save(newWord);
 
         vocabIds.add(saved.getId());
-        user.setVocabulary(vocabIds);
+        user.setVocabularyIds(vocabIds);
         userRepository.save(user);
     }
 
     public void removeWordById(String wordId) {
         User user = getCurrentUser();
-        List<String> vocabIds = user.getVocabulary();
+        List<String> vocabIds = user.getVocabularyIds();
         if (vocabIds != null && vocabIds.remove(wordId)) {
             userRepository.save(user);
             vocabularyRepository.deleteById(wordId);
@@ -79,12 +79,12 @@ public class VocabularyService {
 
     public void removeAllWords() {
         User user = getCurrentUser();
-        List<String> vocabIds = user.getVocabulary();
+        List<String> vocabIds = user.getVocabularyIds();
         if (vocabIds != null && !vocabIds.isEmpty()) {
             List<Vocabulary> toDelete = vocabularyRepository.findAllByIdInAndLanguage(vocabIds, user.getLanguage());
             List<String> idsToDelete = toDelete.stream().map(Vocabulary::getId).toList();
             vocabularyRepository.deleteAllById(idsToDelete);
-            user.setVocabulary(new ArrayList<>());
+            user.setVocabularyIds(new ArrayList<>());
             userRepository.save(user);
         }
     }
