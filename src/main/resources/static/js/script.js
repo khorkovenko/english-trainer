@@ -504,7 +504,11 @@ export { fetchVocabulary };
 
 
 function fetchGrammar() {
-        console.log("fetchGrammar");
+    const grammarContent = document.getElementById('grammar-content');
+    grammarContent.innerHTML = '';
+    const headerGrammarContent = document.createElement('div');
+    grammarContent.appendChild(headerGrammarContent);
+
 }
 
 export { fetchGrammar };

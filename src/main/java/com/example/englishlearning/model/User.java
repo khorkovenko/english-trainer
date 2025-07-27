@@ -36,4 +36,6 @@ public class User {
     private Mistakes mistakes;
 
     private List<String> vocabulary = new ArrayList<>();
+
+    private List<String> grammar = new ArrayList<>();
 }
