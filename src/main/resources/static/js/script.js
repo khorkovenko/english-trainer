@@ -518,7 +518,12 @@ function fetchGrammar() {
 
     const grammarHelpBtn = createButton('Help', async () => {
         if (!grammarRuleName.value) return alert('Please enter rule name for help!');
-        const prompt = `Create an adaptive HTML table explaining the grammar rule: "${grammarRuleName.value}", with sample usages. Style it responsively for all screen sizes.`;
+        const prompt = `Create an adaptive HTML table explaining the grammar rule: "${grammarRuleName.value}", with sample usages. 
+            All explanation and content must be in HTML only, wrapped in a single outer <div> tag. 
+            All styles must be inline (using the style attribute directly in HTML). 
+            Do not use any CSS classes or external stylesheets. 
+            The layout should be responsive and readable on all screen sizes.`;
+
         window.open(`https://chat.openai.com/?model=gpt-4&prompt=${encodeURIComponent(prompt)}`, '_blank');
     });
 
@@ -606,7 +611,15 @@ function renderTable(data) {
         const actionsCell = document.createElement('td');
         actionsCell.appendChild(createButton('Show', () => showModal(rule.ruleExplanation)));
         actionsCell.appendChild(createButton('Train', () => {
-            const prompt = `Create a quiz with 10 questions for the grammar rule: "${rule.ruleName}". Explanation:\n${rule.ruleExplanation}`;
+            const prompt = `Create a quiz with 10 random
+             questions for the grammar rule: "${rule.ruleName}". 
+             Explanation:\n${rule.ruleExplanation}. Ignore Html code to full extent.
+             Provide 10 questions that are related to the grammar rule.
+             Provide for each question 4 variants of correct answer. As numbered list (1,2,3,4).
+             Next prompt I will send you 10 numbers.
+             Evaluate my answers and say where I was wrong and why.
+             After this evaluation request whether to continue such quiz with new 10 questions or not until I stop it. 
+             `;
             window.open(`https://chat.openai.com/?model=gpt-4&prompt=${encodeURIComponent(prompt)}`, '_blank');
         }));
         actionsCell.appendChild(createButton('Remove', () => {
