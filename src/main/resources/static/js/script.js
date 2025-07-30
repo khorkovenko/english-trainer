@@ -665,21 +665,71 @@ function showModal(htmlContent) {
 export { fetchGrammar };
 
 function fetchListening() {
-        const queryInput = document.createElement('input');
-        const queryBtn = document.createElement('button');
+    const listeningParent = document.getElementById('listening-content');
+
+    // Clear previous content
+    listeningParent.innerHTML = '';
+
+    // Create notice span for TTS plugin info
+    const noticeSpan = document.createElement('span');
+    noticeSpan.innerText = 'Please ensure you have a text-to-speech plugin installed for audio playback.';
+    noticeSpan.classList.add('listening-alert');
+
+    // Create input
+    const queryInput = document.createElement('input');
+    queryInput.setAttribute('type', 'text');
+    queryInput.setAttribute('placeholder', 'Enter a theme for the listening exercise...');
+    queryInput.classList.add('listening-input');
+
+    // Create button-like anchor
+    const queryLink = document.createElement('a');
+    queryLink.innerText = 'Generate Listening Exercise';
+    queryLink.href = '#';
+    queryLink.classList.add('listening-button');
+
+    // Click handler
+    queryLink.onclick = (e) => {
+        e.preventDefault();
+        const theme = queryInput.value.trim();
+        if (!theme) {
+            alert('Please enter a theme to continue.');
+            return;
+        }
+
         const gptQuery = `
-            create a text for ${queryInput.value} to listen it as listenint exercitse.
-            make this text by ieltis standarts. after this text create quiz 10 questions. for each question I need
-            to write down missing words - make it like on IELTIS. I will provide answers for each. you need to check my answers
-            give me a feedback. and ask to generate second text or not. USe more unknown words for not native speakers 
-            but normal for native speakers WHEN  you generate text and quiz.
+            Create an IELTS-style listening exercise based on the theme provided in the variable "${theme}". Choose the most appropriate format among the following based on the theme: 
+            1) university lecture, 
+            2) a conversation between two people, or 
+            3) a monologue.
+            
+            Step 1: Generate a natural, native-level English listening script (approximately 250–300 words) with a mix of advanced but common vocabulary for non-native speakers.
+            
+            Step 2: Based on the script, generate a quiz with 10 fill-in-the-blank questions. Each question should be a short phrase with one or two key missing words. Format each question as plain text, numbered, with the blank indicated (e.g., “He was ___ to the event.”). Do not include answers yet.
+            
+            Step 3: Wait for the user to submit their answers in the format: beginning of the phrase with the missing word(s) included. Then, compare the user’s answers with the correct ones, providing feedback for each:
+            - If correct: acknowledge
+            - If incorrect: show correct word(s), suggest synonyms, and give a usage example
+            
+            At the end of the feedback, ask the user: “Would you like to generate a second text?”
         `;
+
+        window.open(`https://chat.openai.com/?model=gpt-4&prompt=${encodeURIComponent(gptQuery)}`, '_blank');
+
+    };
+
+    // Append elements to parent in order
+    listeningParent.appendChild(noticeSpan);
+    listeningParent.appendChild(queryInput);
+    listeningParent.appendChild(queryLink);
 }
+
 
 export { fetchListening };
 
 function fetchWriting() {
-        console.log("fetchWriting");
+        let writingPrompt = `
+            I need to create a prompt for the case when I will send to chatGpt text from writing exercise and I need that chat checked it for grammar mistakes , and for styling mistakes (using obsolete words or not used words) or failed grammar for some cases etc... and provided for me this mistakes as list
+        `;
 }
 
 export { fetchWriting };
