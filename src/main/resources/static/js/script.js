@@ -665,7 +665,15 @@ function showModal(htmlContent) {
 export { fetchGrammar };
 
 function fetchListening() {
-        console.log("fetchListening");
+        const queryInput = document.createElement('input');
+        const queryBtn = document.createElement('button');
+        const gptQuery = `
+            create a text for ${queryInput.value} to listen it as listenint exercitse.
+            make this text by ieltis standarts. after this text create quiz 10 questions. for each question I need
+            to write down missing words - make it like on IELTIS. I will provide answers for each. you need to check my answers
+            give me a feedback. and ask to generate second text or not. USe more unknown words for not native speakers 
+            but normal for native speakers WHEN  you generate text and quiz.
+        `;
 }
 
 export { fetchListening };
