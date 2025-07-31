@@ -727,10 +727,219 @@ function fetchListening() {
 export { fetchListening };
 
 function fetchWriting() {
-        let writingPrompt = `
-            I need to create a prompt for the case when I will send to chatGpt text from writing exercise and I need that chat checked it for grammar mistakes , and for styling mistakes (using obsolete words or not used words) or failed grammar for some cases etc... and provided for me this mistakes as list
-        `;
+    let writingPrompt = `
+        You are an English writing assistant. A learner will input a written text (50–250 words) that may include grammar issues, awkward style, or uncommon/non-native phrasing. 
+
+        Your task is to:
+        1. Read the text carefully and identify grammar mistakes, unnatural or outdated phrases, or anything that doesn't sound like how a native speaker would express the idea.
+        2. For each issue, provide:
+           - A brief explanation (no more than 3 sentences) about *why* it's incorrect or unnatural.
+           - Advice on how to think about this mistake to avoid it in the future.
+        3. Then, rewrite:
+           - Only the problematic sentence(s) if there are just a few issues.
+           - Or the entire text if there are many issues throughout.
+        4. At the end, provide a final version rewritten in smooth, natural English.
+
+        5. Finally, estimate how this writing might score on an IELTS writing band scale (1–9) and briefly justify that score.
+
+        Structure your output as follows:
+
+        **Mistakes and Explanations**
+        1. [Quote the original sentence or phrase]
+           - Explanation: [...]
+           - How to think differently: [...]
+
+        2. [Repeat for each issue]
+
+        **Corrected Sentences**
+        - [Only rewrite the sentences that were changed]
+
+        **Full Native Speaker Version**
+        [Provide a clean, natural rewrite of the full text, in a native tone.]
+
+        **Estimated IELTS Band Score**
+        Band: [score] - [reason]
+    `;
+
+    const writingParent = document.getElementById('writing-content');
+    writingParent.innerHTML = '';
+    const container = document.createElement('div');
+    container.classList.add('writing-container');
+
+    const header = document.createElement('h4');
+    header.style.color = '#ffffff';
+    header.style.marginBottom = '10px';
+    header.style.fontSize = '1.1rem';
+    header.innerText = 'Choose word count and time limit. Then write about any topic that interests you.';
+    container.appendChild(header);
+
+    const topControls = document.createElement('div');
+    topControls.id = 'top-controls';
+
+    const controlsWrapper = document.createElement('div');
+    controlsWrapper.style.display = 'flex';
+    controlsWrapper.style.gap = '10px';
+    controlsWrapper.style.marginBottom = '12px';
+    controlsWrapper.style.flexWrap = 'wrap';
+
+    const createSelect = (labelText, options, defaultVal) => {
+        const wrapper = document.createElement('div');
+        const label = document.createElement('label');
+        label.innerText = labelText;
+        label.style.color = 'white';
+        label.style.display = 'block';
+
+        const select = document.createElement('select');
+        options.forEach(optVal => {
+            const opt = document.createElement('option');
+            opt.value = optVal;
+            opt.innerText = optVal === 'unlimited' ? 'Unlimited' : `${optVal}${labelText.includes('Time') ? ' sec' : ' words'}`;
+            select.appendChild(opt);
+        });
+        select.value = defaultVal;
+        select.classList.add('writing-select');
+        wrapper.appendChild(label);
+        wrapper.appendChild(select);
+        return { wrapper, select };
+    };
+
+    const wordOptions = ['unlimited', 50, 100, 150, 200, 250];
+    const timeOptions = ['unlimited', 120, 240, 360, 480, 600];
+
+    const { wrapper: wordWrapper, select: wordsLimit } = createSelect('Word Count', wordOptions, 'unlimited');
+    const { wrapper: timeWrapper, select: timeLimit } = createSelect('Time Limit', timeOptions, 'unlimited');
+
+    controlsWrapper.appendChild(wordWrapper);
+    controlsWrapper.appendChild(timeWrapper);
+
+    const buttonRow = document.createElement('div');
+    buttonRow.style.display = 'flex';
+    buttonRow.style.gap = '12px';
+    buttonRow.style.marginBottom = '12px';
+
+    const topicBtn = document.createElement('a');
+    topicBtn.innerText = 'Find a Good IELTS Topic';
+    topicBtn.href = 'https://gemini.google.com/app?q=Good+IELTS+writing+task+2+topic+with+graph+description+and+generate+bar+image';
+    topicBtn.target = '_blank';
+    topicBtn.classList.add('writing-button');
+
+    const startBtn = document.createElement('a');
+    startBtn.innerText = 'Start Writing';
+    startBtn.href = '#';
+    startBtn.classList.add('writing-button');
+
+    buttonRow.appendChild(startBtn);
+    buttonRow.appendChild(topicBtn);
+
+    topControls.appendChild(controlsWrapper);
+    topControls.appendChild(buttonRow);
+    container.appendChild(topControls);
+
+    const writingSection = document.createElement('div');
+    writingSection.style.display = 'none';
+
+    const textInput = document.createElement('textarea');
+    textInput.setAttribute('placeholder', 'Paste or type your writing...');
+    textInput.classList.add('writing-textarea');
+    textInput.disabled = true;
+
+    const wordCountDisplay = document.createElement('div');
+    wordCountDisplay.style.marginTop = '8px';
+    wordCountDisplay.style.fontSize = '0.9rem';
+    wordCountDisplay.innerText = 'Words: 0';
+    wordCountDisplay.style.color = 'red';
+
+    const timerDisplay = document.createElement('div');
+    timerDisplay.style.marginTop = '12px';
+    timerDisplay.style.marginBottom = '12px';
+    timerDisplay.style.fontSize = '0.9rem';
+    timerDisplay.style.color = 'white';
+    timerDisplay.style.display = 'none';
+
+    writingSection.appendChild(textInput);
+    writingSection.appendChild(wordCountDisplay);
+    writingSection.appendChild(timerDisplay);
+
+    const submitBtn = document.createElement('a');
+    submitBtn.innerText = 'Check My Writing';
+    submitBtn.href = '#';
+    submitBtn.classList.add('writing-button');
+
+    let timerInterval;
+    let timeLeft;
+
+    function updateWordCount() {
+        const words = textInput.value.trim().split(/\s+/).filter(Boolean);
+        const limit = wordsLimit.value;
+
+        if (limit !== 'unlimited') {
+            const limitVal = parseInt(limit);
+            if (words.length < limitVal) {
+                wordCountDisplay.style.color = 'red';
+            } else {
+                wordCountDisplay.style.color = 'limegreen';
+            }
+            wordCountDisplay.innerText = `${words.length} out of ${limitVal}`;
+        } else {
+            wordCountDisplay.innerText = `Words: ${words.length}`;
+            wordCountDisplay.style.color = 'limegreen';
+        }
+    }
+
+    textInput.addEventListener('input', updateWordCount);
+
+    startBtn.onclick = (e) => {
+        e.preventDefault();
+        textInput.disabled = false;
+        writingSection.style.display = 'block';
+        const top = document.getElementById('top-controls');
+        if (top) top.style.display = 'none';
+        updateWordCount();
+
+        if (timerInterval) clearInterval(timerInterval);
+        if (timeLimit.value !== 'unlimited') {
+            timeLeft = parseInt(timeLimit.value);
+            timerDisplay.style.display = 'block';
+            timerDisplay.innerText = `Time left: ${timeLeft}s`;
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerDisplay.innerText = `Time left: ${timeLeft}s`;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    textInput.disabled = true;
+                    submitBtn.click();
+                }
+            }, 1000);
+        } else {
+            timerDisplay.style.display = 'none';
+        }
+    };
+
+    submitBtn.onclick = (e) => {
+        e.preventDefault();
+        const text = textInput.value.trim();
+        const words = text.split(/\s+/).filter(Boolean);
+        const limit = wordsLimit.value;
+
+        if (limit !== 'unlimited' && words.length < parseInt(limit)) {
+            alert(`Your text has only ${words.length} words. Minimum required: ${limit}.`);
+            return;
+        }
+
+        if (limit !== 'unlimited' && words.length > parseInt(limit) + 10) {
+            alert(`Your text has ${words.length} words. Please keep it within ${parseInt(limit) + 10} words.`);
+            return;
+        }
+
+        const fullPrompt = `${writingPrompt}\n\nUser Text:\n"${text}"`;
+        window.open(`https://chat.openai.com/?model=gpt-4&prompt=${encodeURIComponent(fullPrompt)}`, '_blank');
+    };
+
+    writingSection.appendChild(submitBtn);
+    container.appendChild(writingSection);
+    writingParent.appendChild(container);
 }
+
 
 export { fetchWriting };
 
