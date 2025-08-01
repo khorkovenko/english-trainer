@@ -944,20 +944,120 @@ function fetchWriting() {
 export { fetchWriting };
 
 function fetchSpeaking() {
-        console.log("fetchSpeaking");
+    const speakingParent = document.getElementById('speaking-content');
+    speakingParent.innerHTML = '';
+
+    // Warmup section container
+    const warmupSection = document.createElement('div');
+    warmupSection.className = 'warmup-section';
+
+    // Header
+    const header = document.createElement('div');
+    header.className = 'warmup-header';
+    header.textContent = '🟡 Warmup: Practice speaking English on a theme of your choice';
+
+    // Input
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.placeholder = 'Enter a theme for the conversation...';
+    input.className = 'theme-input';
+
+    // Start ChatGPT Button
+    const chatBtn = document.createElement('button');
+    chatBtn.textContent = 'Start Conversation';
+    chatBtn.className = 'start-chat-btn';
+
+    chatBtn.onclick = () => {
+        const theme = input.value.trim();
+        if (!theme) {
+            alert('Please define a theme before starting the conversation.');
+            return;
+        }
+
+        const chatPrompt = `
+You are an IELTS Speaking examiner. The theme will be passed as a string argument. Use it to guide the conversation as follows:
+
+1. Structure the test in 3 parts:
+   - Part 1: Ask 3 general introductory questions, loosely based on the theme if suitable.
+   - Part 2: Give one cue card task related to the theme. After the user responds, ask one simple follow-up question.
+   - Part 3: Ask 3 more abstract or opinion-based questions based on the theme.
+
+2. After each question, wait for the user to say "next" before continuing.
+
+3. After each response, give feedback in three parts:
+   - Mistakes in grammar or vocabulary (with corrections)
+   - Pronunciation and clarity issues (assume user is speaking English even with a strong accent)
+   - Suggestions to sound more native (e.g., natural phrasing, idioms, tone)
+
+4. After giving feedback, ask: “Would you like to continue to the next question?”
+
+5. If the user says “no,” end the session by summarizing:
+   - A list of all mistakes made throughout the test
+   - Suggestions for improvement
+   - An estimated IELTS Speaking band score based on performance
+
+Always keep the tone professional and clear.
+
+Theme: ${theme}
+    `.trim();
+
+        const encodedPrompt = encodeURIComponent(chatPrompt);
+        window.open(`https://chat.openai.com/?model=gpt-4&prompt=${encodedPrompt}`, '_blank');
+    };
+
+    // Help with Theme Button
+    const helpBtn = document.createElement('button');
+    helpBtn.textContent = 'Help with theme';
+    helpBtn.className = 'help-theme-btn';
+
+    helpBtn.onclick = () => {
+        const theme = input.value.trim();
+        const query = encodeURIComponent(`Better IELTS speaking theme idea based on: ${theme}`);
+        window.open(`https://www.perplexity.ai/search?q=${query}`, '_blank');
+    };
+
+    // Links Section
+    const linksSection = document.createElement('div');
+    linksSection.className = 'links-section';
+
+    const links = [
+        ['Speak & Improve', 'https://speakandimprove.com'],
+        ['Speaking Club', 'https://speakingclub.com'],
+        ['Free4Talk', 'https://www.free4talk.com'],
+        ['HiLoKal', 'https://www.hilokal.com/en/speak/English'],
+        ['SmallTalk2.me', 'https://smalltalk2.me'],
+        ['Gliglish', 'https://gliglish.com'],
+        ['Duolingo', 'https://www.duolingo.com'],
+        ['HelloTalk', 'https://www.hellotalk.com']
+    ];
+
+    links.forEach(([name, url]) => {
+        const link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = name;
+        link.className = 'speaking-link';
+        linksSection.appendChild(link);
+    });
+
+    // Assemble
+    warmupSection.appendChild(header);
+    warmupSection.appendChild(input);
+    warmupSection.appendChild(chatBtn);
+    warmupSection.appendChild(helpBtn);
+    warmupSection.appendChild(linksSection);
+
+    speakingParent.appendChild(warmupSection);
 }
+
 
 export { fetchSpeaking };
 
 function fetchMistakes() {
-        console.log("fetchMistakes");
+        const mistakesParent = document.getElementById('mistakes-content');
+        mistakesParent.innerHTML = '';
+
 }
 
 export { fetchMistakes };
-
-function showAppModal(name, html) {
-        console.log("show modal");
-
-}
-
-export { showAppModal };
