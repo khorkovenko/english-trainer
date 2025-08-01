@@ -1,18 +1,22 @@
 package com.example.englishlearning.model;
 
-import lombok.*;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
-@Document(collection = "mistakes")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Mistakes {
 
-    private Set<Vocabulary> vocabularies;
-    private Set<Grammar> grammars;
+    private Set<String> vocabulary;
+    private Set<String> grammar;
+    private Set<String> reading;
+    private Set<String> writing;
+    private Set<String> speaking;
 
 }

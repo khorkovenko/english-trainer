@@ -723,3 +723,62 @@ input {
 .speaking-link:hover {
     background-color: #ddd;
 }
+
+/* Mistakes section */
+.mistakes-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    table-layout: fixed;
+}
+
+.sticky-header {
+    position: sticky;
+    top: 0;
+    background-color: #ffc107;
+    padding: 0.5rem;
+    text-align: center;
+    z-index: 1;
+}
+
+.header-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.mistake-input {
+    padding: 0.25rem;
+    font-size: 0.9rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.add-btn {
+    padding: 0.3rem;
+    font-size: 0.85rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-btn:disabled {
+    background-color: #94d3a2;
+    cursor: not-allowed;
+}
+
+.mistake-cell {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    text-align: center;
+    cursor: pointer;
+    word-wrap: break-word;
+}
+
+.mistake-cell:hover {
+    background-color: #ff0808;
+}

@@ -1054,10 +1054,103 @@ Theme: ${theme}
 
 export { fetchSpeaking };
 
-function fetchMistakes() {
-        const mistakesParent = document.getElementById('mistakes-content');
-        mistakesParent.innerHTML = '';
+const fetchMistakes = async () => {
+    const maxMistakes = 30;
+    const mistakeTypes = ['vocabulary', 'grammar', 'reading', 'writing', 'speaking'];
+    const mistakesMap = {
+        vocabulary: [],
+        grammar: [],
+        reading: [],
+        writing: [],
+        speaking: []
+    };
 
-}
+    const mistakesParent = document.getElementById('mistakes-content');
+    mistakesParent.innerHTML = '';
+
+    const res = await fetch('/mistakes');
+    if (res.ok) {
+        const data = await res.json();
+        mistakeTypes.forEach(type => {
+            mistakesMap[type] = Array.isArray(data[type]) ? data[type].slice(0, maxMistakes) : Array.from(data[type] || []);
+        });
+    }
+
+    const saveToBackend = async () => {
+        await fetch('/mistakes', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(mistakesMap)
+        });
+    };
+
+    const table = document.createElement('table');
+    table.className = 'mistakes-table';
+
+    const header = document.createElement('tr');
+    mistakeTypes.forEach(type => {
+        const th = document.createElement('th');
+        th.className = 'sticky-header';
+        th.innerHTML = `
+            <div class="header-block">
+                <span>${type.charAt(0).toUpperCase() + type.slice(1)}</span>
+                <input id="input-${type}" type="text" class="mistake-input" placeholder="Add mistake..." />
+                <button class="add-btn" disabled>Add</button>
+            </div>
+        `;
+        header.appendChild(th);
+    });
+    table.appendChild(header);
+
+    for (let i = 0; i < maxMistakes; i++) {
+        const row = document.createElement('tr');
+        mistakeTypes.forEach(type => {
+            const cell = document.createElement('td');
+            const value = mistakesMap[type][i];
+            if (value) {
+                cell.textContent = value;
+                cell.className = 'mistake-cell';
+                cell.ondblclick = () => {
+                    const prompt = encodeURIComponent(`Help me practice correcting this mistake: "${value}"`);
+                    window.open(`https://chat.openai.com/?model=gpt-4&prompt=${prompt}`, '_blank');
+                };
+            } else {
+                cell.innerHTML = '&nbsp;';
+            }
+            row.appendChild(cell);
+        });
+        table.appendChild(row);
+    }
+
+    mistakesParent.appendChild(table);
+
+    mistakeTypes.forEach(type => {
+        const input = document.getElementById(`input-${type}`);
+        const button = input.nextElementSibling;
+
+        input.addEventListener('input', () => {
+            button.disabled = input.value.trim() === '';
+        });
+
+        button.onclick = async () => {
+            const value = input.value.trim();
+            if (!value) {
+                alert('Please enter a mistake before adding.');
+                return;
+            }
+
+            mistakesMap[type].unshift(value);
+            if (mistakesMap[type].length > maxMistakes) {
+                mistakesMap[type].pop();
+            }
+
+            input.value = '';
+            button.disabled = true;
+            await saveToBackend();
+            await fetchMistakes();
+        };
+    });
+};
 
 export { fetchMistakes };
+
